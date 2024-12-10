@@ -4,14 +4,34 @@ var cords = board.getBoundingClientRect();
 
 let ship = document.createElement("div");
 ship.id = "ship";
-
 board.appendChild(ship);
 
-console.log(ship.style.top);
+
 ship.style.top = `${cords.height}px`;
 ship.style.left = `${cords.width / 2 + ship.offsetWidth}px`;
-console.log(ship.style.left);
 
+
+/*enemy*/
+let enemy = document.createElement("div");
+enemy.classList.add('enemy')
+board.appendChild(enemy)
+/***************************/
+let derection = true
+let enemySpeed = 2
+function moveEnemy() {
+  if (enemy.offsetLeft > cords.right - enemy.offsetWidth) {
+    enemySpeed *= -1
+  }
+  if (enemy.offsetLeft < board.offsetLeft) {
+    enemySpeed *= -1
+  }
+  enemy.style.left = `${enemy.offsetLeft + enemySpeed}px`
+  console.log(enemy.offsetLeft + enemySpeed);
+  requestAnimationFrame(moveEnemy)
+}
+requestAnimationFrame(moveEnemy)
+moveEnemy()
+/*******************************************/
 window.addEventListener("keydown", (event) => {
   if (event.key == " ") {
     shut();
@@ -19,6 +39,9 @@ window.addEventListener("keydown", (event) => {
     moveShip(event.key);
   }
 });
+
+/*******************************************/
+const bulletSpeed = 5;
 function shut() {
   let bullet = document.createElement("div");
   bullet.classList.add("bullets");
@@ -27,19 +50,20 @@ function shut() {
   board.appendChild(bullet);
   move(bullet);
 }
-const bulletSpeed = 5;
+
 function move(bullet) {
   function animate() {
-    if (bullet.offsetTop > 0) {
+    if (bullet.offsetTop > cords.top) {
       bullet.style.top = `${bullet.offsetTop - bulletSpeed}px`;
       requestAnimationFrame(animate);
     } else {
       bullet.remove();
     }
   }
-
   requestAnimationFrame(animate);
 }
+
+/*******************************************/
 function moveShip(direction) {
   switch (direction) {
     case "ArrowLeft":
@@ -57,3 +81,4 @@ function moveShip(direction) {
       break;
   }
 }
+
