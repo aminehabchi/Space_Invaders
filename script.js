@@ -1,3 +1,5 @@
+var score = 0;
+let ScoreBar = document.getElementById('score')
 let board = document.getElementById("board");
 
 var cords = board.getBoundingClientRect();
@@ -26,11 +28,11 @@ function moveEnemy() {
     enemySpeed *= -1
   }
   enemy.style.left = `${enemy.offsetLeft + enemySpeed}px`
-  console.log(enemy.offsetLeft + enemySpeed);
   requestAnimationFrame(moveEnemy)
 }
 requestAnimationFrame(moveEnemy)
 moveEnemy()
+
 /*******************************************/
 window.addEventListener("keydown", (event) => {
   if (event.key == " ") {
@@ -39,6 +41,18 @@ window.addEventListener("keydown", (event) => {
     moveShip(event.key);
   }
 });
+
+/*****************************/
+function isColliding(bullet, enemy) {
+  let a = bullet.getBoundingClientRect();
+  let b = enemy.getBoundingClientRect();
+  return (
+    a.left < b.right &&
+    a.right > b.left &&
+    a.top < b.bottom &&
+    a.bottom > b.top
+  );
+}
 
 /*******************************************/
 const bulletSpeed = 5;
@@ -55,6 +69,13 @@ function move(bullet) {
   function animate() {
     if (bullet.offsetTop > cords.top) {
       bullet.style.top = `${bullet.offsetTop - bulletSpeed}px`;
+      document.querySelectorAll('.enemy').forEach((e) => {
+        if (isColliding(bullet, e)) {
+          score += 5
+          ScoreBar.innerHTML = String(score).padStart(4, '0')
+          e.remove()
+        }
+      })
       requestAnimationFrame(animate);
     } else {
       bullet.remove();
@@ -62,7 +83,6 @@ function move(bullet) {
   }
   requestAnimationFrame(animate);
 }
-
 /*******************************************/
 function moveShip(direction) {
   switch (direction) {
