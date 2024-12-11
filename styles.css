@@ -50,8 +50,8 @@ body {
 }
 
 .enemy {
-    height: 50px;
-    width: 100px;
+    height: 30px;
+    width: 50px;
     background-image: url('alien-cyan.png');
     background-size: cover;
 

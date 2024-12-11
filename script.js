@@ -2,7 +2,7 @@ var score = 0;
 var LEVELE = 0;
 var enemyLevel = 1;
 var enemyNBR = 1;
-
+var isPaused = false;
 let ScoreBar = document.getElementById("score");
 let board = document.getElementById("board");
 let enemysDiv = document.getElementById("enemysDiv");
@@ -19,7 +19,19 @@ board.appendChild(ship);
 
 ship.style.top = `${cords.height}px`;
 ship.style.left = `${cords.width / 2 + ship.offsetWidth}px`;
+/**********************************************/
+function throttle(func, interval) {
+  let lastCall = 0;
 
+  return function (...args) {
+    const now = Date.now();
+
+    if (now - lastCall >= interval) {
+      lastCall = now;
+      func.apply(this, args);
+    }
+  };
+}
 /*****************LEVEL************************/
 function levelUP() {
   document.querySelectorAll(".bullets").forEach((e) => {
@@ -42,6 +54,9 @@ function levelUP() {
 
 let enemySpeed = 1;
 function moveEnemys() {
+  if (isPaused) {
+    return;
+  }
   if (
     enemysDiv.offsetLeft > cords.right - enemysDiv.offsetWidth ||
     enemysDiv.offsetLeft < cords.left
@@ -53,14 +68,17 @@ function moveEnemys() {
   enemysDiv.style.left = `${enemysDiv.offsetLeft + enemySpeed}px`;
   requestAnimationFrame(moveEnemys);
 }
-// requestAnimationFrame(moveEnemys);
+//  requestAnimationFrame(moveEnemys);
 levelUP();
 moveEnemys();
 
 /*******************************************/
 window.addEventListener("keydown", (event) => {
+  if (isPaused) {
+    return;
+  }
   if (event.key == " ") {
-    shut();
+    throttledShut();
   } else {
     moveShip(event.key);
   }
@@ -85,7 +103,7 @@ function shut() {
   board.appendChild(bullet);
   move(bullet);
 }
-
+var throttledShut = throttle(shut, 1000);
 function move(bullet) {
   function animate() {
     if (!bullet) {
@@ -96,7 +114,7 @@ function move(bullet) {
       document.querySelectorAll(".enemy").forEach((e) => {
         if (isColliding(bullet, e)) {
           score += 5;
-          ScoreBar.innerHTML = String(score).padStart(4, "0");
+          ScoreBar.textContent = String(score).padStart(4, "0");
           e.remove();
           bullet.remove();
           enemyNBR--;
@@ -130,5 +148,33 @@ function moveShip(direction) {
         ship.style.left = `${ship.offsetLeft + 10}px`;
       }
       break;
+  }
+}
+/*************************************/
+function Restart() {
+  document.querySelectorAll(".enemy").forEach((e) => {
+    e.remove();
+  });
+  if (isPaused) {
+    isPaused = false;
+    btnPR.textContent = "Pause";
+    moveEnemys();
+  }
+  LEVELE = 0;
+  enemyLevel = 1;
+  score = 0;
+  ScoreBar.textContent = "0000";
+  levelUP();
+}
+/***********************************/
+let btnPR = document.querySelector("#psCn");
+function Pause_Continue() {
+  if (isPaused) {
+    isPaused = false;
+    btnPR.textContent = "Pause";
+    moveEnemys();
+  } else {
+    btnPR.textContent = "Continue";
+    isPaused = true;
   }
 }
