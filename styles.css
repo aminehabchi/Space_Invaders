@@ -4,12 +4,27 @@ body {
 
     flex-direction: column;
     align-items: center;
+
+    background-image: url('space.jpg');
+    background-size: cover;
 }
+
+h1 {
+    color: blanchedalmond;
+}
+
+.icons {
+    position: absolute;
+    color: blanchedalmond;
+    height: 32px;
+    width: 32px;
+    cursor: pointer;
+}
+
 
 #board {
     height: 700px;
     width: 700px;
-    background-color: black;
     margin: 0;
     padding: 0;
 }

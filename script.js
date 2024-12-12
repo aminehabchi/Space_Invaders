@@ -17,8 +17,21 @@ let ship = document.createElement("div");
 ship.id = "ship";
 board.appendChild(ship);
 
-ship.style.top = `${cords.height}px`;
-ship.style.left = `${cords.width / 2 + ship.offsetWidth}px`;
+ship.style.top = `${cords.height + cords.top - ship.offsetHeight - 30}px`;
+ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
+
+/************ restrt pause contunie positon************** */
+let RestartBtn = document.querySelector("#restart");
+RestartBtn.style.right = `${cords.left}px`;
+RestartBtn.style.top = `${cords.bottom}px`;
+let PlayBtn = document.querySelector("#play");
+let PauseBtn = document.querySelector("#pause");
+
+PlayBtn.style.left = `${cords.left}px`;
+PlayBtn.style.top = `${cords.bottom}px`;
+PauseBtn.style.left = `${cords.left}px`;
+PauseBtn.style.top = `${cords.bottom}px`;
+PlayBtn.style.visibility = "hidden";
 /**********************************************/
 function throttle(func, interval) {
   let lastCall = 0;
@@ -94,7 +107,7 @@ function isColliding(bullet, enemy) {
 }
 
 /*******************************************/
-const bulletSpeed = 5;
+const bulletSpeed = 8;
 function shut() {
   let bullet = document.createElement("div");
   bullet.classList.add("bullets");
@@ -103,7 +116,7 @@ function shut() {
   board.appendChild(bullet);
   move(bullet);
 }
-var throttledShut = throttle(shut, 1000);
+var throttledShut = throttle(shut, 800);
 function move(bullet) {
   function animate() {
     if (!bullet) {
@@ -171,10 +184,12 @@ let btnPR = document.querySelector("#psCn");
 function Pause_Continue() {
   if (isPaused) {
     isPaused = false;
-    btnPR.textContent = "Pause";
+    PauseBtn.style.visibility = "visible";
+    PlayBtn.style.visibility = "hidden";
     moveEnemys();
   } else {
-    btnPR.textContent = "Continue";
+    PauseBtn.style.visibility = "hidden";
+    PlayBtn.style.visibility = "visible";
     isPaused = true;
   }
 }
