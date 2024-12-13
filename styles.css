@@ -7,6 +7,7 @@ body {
 
     background-image: url('space.jpg');
     background-size: cover;
+    color: blanchedalmond;
 }
 
 h1 {
@@ -60,7 +61,7 @@ h1 {
     position: absolute;
     width: 80px;
     height: 30px;
-    color: blanchedalmond;
+
     font-size: 20px;
 }
 
@@ -76,7 +77,6 @@ h1 {
     position: absolute;
     width: 600px;
     height: auto;
-    border: 1px solid red;
     display: flex;
     justify-content: center;
 
@@ -84,4 +84,16 @@ h1 {
 
 #level {
     position: absolute;
+}
+
+#textAnimation {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 80px;
+}
+
+#cursor {
+    font-weight: bold;
 }
