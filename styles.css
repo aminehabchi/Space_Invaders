@@ -97,3 +97,13 @@ h1 {
 #cursor {
     font-weight: bold;
 }
+
+#lives {
+    width: 150px;
+    height: 40px;
+    border: 1px solid red;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

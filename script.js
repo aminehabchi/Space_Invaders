@@ -8,10 +8,14 @@ let ScoreBar = document.getElementById("score");
 let enemysDiv = document.getElementById("enemysDiv");
 let board = document.getElementById("board");
 var cords = board.getBoundingClientRect();
-
+const live = `<span class="lives material-symbols-outlined">
+settings_heart
+</span>`;
+var lives = document.querySelectorAll(".lives");
+console.log(lives.length);
 var divText = document.getElementById("textAnimation");
 divText.style.left = `${cords.left}px`;
-divText.style.top = `${cords.left}px`;
+divText.style.top = `${cords.top}px`;
 divText.style.width = `${cords.width}px`;
 divText.style.height = `${cords.height}px`;
 divText.style.visibility = "hidden";
@@ -20,6 +24,7 @@ let levelDiv = document.getElementById("level");
 levelDiv.style.left = `${
   board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
 }px`;
+
 levelDiv.style.top = `${cords.top}px`;
 let ship = document.createElement("div");
 ship.id = "ship";
@@ -28,6 +33,11 @@ board.appendChild(ship);
 ship.style.top = `${cords.height + cords.top - ship.offsetHeight - 30}px`;
 ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
 
+let livesDiv = document.getElementById("lives");
+livesDiv.style.top = `${cords.top}px`;
+livesDiv.style.left = `${
+  cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
+}px`;
 /***********************************************/
 
 var index = 0;
@@ -101,6 +111,7 @@ function levelUP() {
   for (let i = 0; i < enemyLevel; i++) {
     let enemy = document.createElement("div");
     enemy.classList.add("enemy");
+    enemy.classList.add("exist");
     enemy.id = i.toString();
     enemysDiv.appendChild(enemy);
   }
@@ -175,6 +186,7 @@ function move(bullet) {
       document.querySelectorAll(".enemy").forEach((e) => {
         if (e.style.visibility != "hidden") {
           if (isColliding(bullet, e)) {
+            e.classList.remove("exist");
             score += 5;
             ScoreBar.textContent = String(score).padStart(4, "0");
             e.style.visibility = "hidden";
@@ -219,8 +231,6 @@ function moveShip() {
   if (!isMoving) {
     return;
   }
-  console.log("move");
-
   if (direction == "ArrowLeft" && ship.offsetLeft > board.offsetLeft) {
     ship.style.left = `${ship.offsetLeft - shipSpeed}px`;
   }
@@ -242,6 +252,11 @@ function Restart() {
     PauseBtn.style.visibility = "visible";
     PlayBtn.style.visibility = "hidden";
   }
+  livesDiv.innerHTML = "";
+  for (let i = 0; i < 3; i++) {
+    livesDiv.innerHTML += live;
+  }
+  lives = document.querySelectorAll(".lives");
   isGamrOver = false;
   LEVELE = 0;
   enemyLevel = 1;
@@ -290,45 +305,54 @@ setInterval(() => {
   if (isPaused || isGamrOver) {
     return;
   }
-
-  let a = document.getElementById(getNb().toString());
+  let existEnemy = document.querySelectorAll(".exist");
+  if (!existEnemy) {
+    return;
+  }
+  let a = existEnemy[getNb(existEnemy.length).toString()];
   let b = document.createElement("div");
   b.classList.add("bullets");
+  b.classList.add("Xbullets");
+  //console.log(a.offsetTop + a.offsetHeight);
+  let aa = a.getBoundingClientRect();
 
-  b.style.left = `${a.offsetLeft - b.offsetWidth + a.offsetWidth / 2}px`;
-  b.style.top = `${a.offsetTop + a.offsetHeight}px`;
+  b.style.left = `${a.offsetLeft}px`;
+
+  b.style.top = `${a.offsetTop}px`;
+
   enemysDiv.appendChild(b);
-  moveBulletEnemy(b);
+  moveBulletEnemy();
 }, 2000);
 
-const getNb = () => {
-  return Math.floor(Math.random() * enemyLevel);
+const getNb = (n) => {
+  return Math.floor(Math.random() * n);
 };
-function moveBulletEnemy(bullet) {
+function moveBulletEnemy() {
   if (isGamrOver || isPaused) {
     return;
   }
-  function animate() {
-    if (isGamrOver || isPaused) {
-      return;
-    }
-    if (!bullet) {
-      return;
-    }
-    if (bullet.offsetTop < cords.bottom) {
-      bullet.style.top = `${bullet.offsetTop + 2}px`;
-
+  let bullets = document.querySelectorAll(".Xbullets");
+  if (!bullets) {
+    return;
+  }
+  bullets.forEach((bullet) => {
+    let bulletCords = bullet.getBoundingClientRect();
+    if (bulletCords.bottom < cords.bottom) {
+      bullet.style.top = `${bullet.offsetTop + 1}px`;
       if (isColliding(bullet, ship)) {
         bullet.remove();
-
-        gameOver("GAME OVER");
-        return;
+        lives = document.querySelectorAll(".lives");
+        if (lives.length == 1) {
+          gameOver("GAME OVER");
+          return;
+        }
+        lives[0].remove();
       }
-
-      requestAnimationFrame(animate);
     } else {
       bullet.remove();
     }
+  });
+  if (bullets.length > 0) {
+    requestAnimationFrame(moveBulletEnemy);
   }
-  requestAnimationFrame(animate);
 }
