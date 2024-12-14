@@ -96,7 +96,7 @@ function throttle(func, interval) {
 }
 /*****************LEVEL************************/
 function levelUP() {
-  if (LEVELE === 3) {
+  if (LEVELE === 5) {
     gameOver("YOU WIN!!");
     return;
   }
@@ -143,7 +143,7 @@ function moveEnemys() {
 }
 //  requestAnimationFrame(moveEnemys);
 levelUP();
-moveEnemys();
+requestAnimationFrame(moveEnemys);
 
 /*******************************************/
 window.addEventListener("keydown", (event) => {
@@ -190,7 +190,6 @@ function move(bullet) {
             score += 5;
             ScoreBar.textContent = String(score).padStart(4, "0");
             e.style.visibility = "hidden";
-            //  e.remove();
             bullet.remove();
             enemyNBR--;
             if (enemyNBR == 0) {
@@ -264,7 +263,7 @@ function Restart() {
   ScoreBar.textContent = "0000";
   divText.style.visibility = "hidden";
   levelUP();
-  moveEnemys();
+  requestAnimationFrame(moveEnemys);
 }
 /***********************************/
 let btnPR = document.querySelector("#psCn");
@@ -277,6 +276,7 @@ function Pause_Continue() {
     PauseBtn.style.visibility = "visible";
     PlayBtn.style.visibility = "hidden";
     moveEnemys();
+    moveBulletEnemy();
   } else {
     PauseBtn.style.visibility = "hidden";
     PlayBtn.style.visibility = "visible";
@@ -289,6 +289,7 @@ function gameOver(message) {
   isGamrOver = true;
   divText.style.visibility = "visible";
   distroy(".enemy");
+  distroy(".bullets");
   spanText.textContent = "";
   text = message;
   animateText(message);
