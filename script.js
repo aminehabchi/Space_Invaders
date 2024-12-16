@@ -20,8 +20,9 @@ divText.style.height = `${cords.height}px`;
 divText.style.visibility = "hidden";
 
 let levelDiv = document.getElementById("level");
-levelDiv.style.left = `${board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
-  }px`;
+levelDiv.style.left = `${
+  board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
+}px`;
 
 levelDiv.style.top = `${cords.top}px`;
 let ship = document.createElement("div");
@@ -33,8 +34,9 @@ ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
 
 let livesDiv = document.getElementById("lives");
 livesDiv.style.top = `${cords.top}px`;
-livesDiv.style.left = `${cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
-  }px`;
+livesDiv.style.left = `${
+  cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
+}px`;
 /***********************************************/
 
 var index = 0;
@@ -93,6 +95,7 @@ function throttle(func, interval) {
 }
 /*****************LEVEL************************/
 let requestID_MoveEnemy;
+let isLevelUP = false;
 function levelUP() {
   if (!requestID_MoveEnemy) {
     cancelAnimationFrame(requestID_MoveEnemy);
@@ -101,7 +104,7 @@ function levelUP() {
     gameOver("YOU WIN!!");
     return;
   }
-  distroy(".enemy");
+  enemysDiv.innerHTML = "";
   distroy(".bullets");
   enemysDiv.style.left = `${cords.left}px`;
   enemysDiv.style.top = `${cords.top + 60}px`;
@@ -143,9 +146,7 @@ function moveEnemys() {
   requestID_MoveEnemy = requestAnimationFrame(moveEnemys);
 }
 
-
 levelUP();
-
 
 /*******************************************/
 window.addEventListener("keydown", (event) => {
@@ -196,8 +197,9 @@ function move(bullet) {
             enemyNBR--;
             if (enemyNBR == 0) {
               console.log("levelUp");
-              cancelAnimationFrame(animate);
+              cancelAnimationFrame(requestID_MoveEnemy);
               levelUP();
+              return;
             }
           }
         }
@@ -205,6 +207,7 @@ function move(bullet) {
       requestAnimationFrame(animate);
     } else {
       bullet.remove();
+      return;
     }
   }
   requestAnimationFrame(animate);
@@ -212,7 +215,7 @@ function move(bullet) {
 /*******************************************/
 var isMoving = false;
 var direction;
-let requestID_MoveShip
+let requestID_MoveShip;
 window.addEventListener("keydown", (event) => {
   if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !isMoving) {
     direction = event.key;
@@ -226,7 +229,7 @@ window.addEventListener("keyup", (event) => {
   if (event.key == direction) {
     isMoving = false;
     if (!requestID_MoveShip) {
-      cancelAnimationFrame(requestID_MoveShip)
+      cancelAnimationFrame(requestID_MoveShip);
     }
   }
 });
@@ -252,7 +255,7 @@ function moveShip() {
 /*************************************/
 function Restart() {
   cancelAnimationFrame(requestID_MoveEnemy);
-  distroy(".enemy");
+  enemysDiv.innerHTML = "";
   if (isPaused) {
     isPaused = false;
     PauseBtn.style.visibility = "visible";
@@ -270,12 +273,11 @@ function Restart() {
   ScoreBar.textContent = "0000";
   divText.style.visibility = "hidden";
   levelUP();
-
 }
 /***********************************/
 let btnPR = document.querySelector("#psCn");
 function Pause_Continue() {
-  cancelAnimationFrame(requestID_MoveEnemy)
+  cancelAnimationFrame(requestID_MoveEnemy);
   if (isGamrOver) {
     return;
   }
@@ -296,7 +298,7 @@ function Pause_Continue() {
 function gameOver(message) {
   isGamrOver = true;
   divText.style.visibility = "visible";
-  distroy(".enemy");
+  enemysDiv.innerHTML = "";
   distroy(".bullets");
   spanText.textContent = "";
   text = message;
@@ -322,46 +324,42 @@ setInterval(() => {
   let b = document.createElement("div");
   b.classList.add("bullets");
   b.classList.add("Xbullets");
-  //console.log(a.offsetTop + a.offsetHeight);
-  let aa = a.getBoundingClientRect();
 
   b.style.left = `${a.offsetLeft}px`;
 
   b.style.top = `${a.offsetTop}px`;
 
   enemysDiv.appendChild(b);
-  moveBulletEnemy();
+
+  moveBulletEnemy(b);
 }, 2000);
 
 const getNb = (n) => {
   return Math.floor(Math.random() * n);
 };
-function moveBulletEnemy() {
+let requestID;
+function moveBulletEnemy(bullet) {
   if (isGamrOver || isPaused) {
     return;
   }
-  let bullets = document.querySelectorAll(".Xbullets");
-  if (!bullets) {
+
+  if (bullet.offsetTop + bullet.offsetHeight < cords.bottom) {
+    bullet.style.top = `${bullet.offsetTop + 1}px`;
+    if (isColliding(bullet, ship)) {
+      bullet.remove();
+      lives = document.querySelectorAll(".lives");
+      lives[0].remove();
+      if (lives.length == 1) {
+        cancelAnimationFrame(requestID);
+        gameOver("GAME OVER");
+        return;
+      }
+    }
+  } else {
+    cancelAnimationFrame(requestID);
+    bullet.remove();
     return;
   }
-  bullets.forEach((bullet) => {
-    let bulletCords = bullet.getBoundingClientRect();
-    if (bulletCords.bottom < cords.bottom) {
-      bullet.style.top = `${bullet.offsetTop + 1}px`;
-      if (isColliding(bullet, ship)) {
-        bullet.remove();
-        lives = document.querySelectorAll(".lives");
-        if (lives.length == 1) {
-          gameOver("GAME OVER");
-          return;
-        }
-        lives[0].remove();
-      }
-    } else {
-      bullet.remove();
-    }
-  });
 
-  requestAnimationFrame(moveBulletEnemy);
-
+  requestID = requestAnimationFrame(moveBulletEnemy.bind(null, bullet));
 }
