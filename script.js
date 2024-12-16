@@ -12,7 +12,6 @@ const live = `<span class="lives material-symbols-outlined">
 settings_heart
 </span>`;
 var lives = document.querySelectorAll(".lives");
-console.log(lives.length);
 var divText = document.getElementById("textAnimation");
 divText.style.left = `${cords.left}px`;
 divText.style.top = `${cords.top}px`;
@@ -21,9 +20,8 @@ divText.style.height = `${cords.height}px`;
 divText.style.visibility = "hidden";
 
 let levelDiv = document.getElementById("level");
-levelDiv.style.left = `${
-  board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
-}px`;
+levelDiv.style.left = `${board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
+  }px`;
 
 levelDiv.style.top = `${cords.top}px`;
 let ship = document.createElement("div");
@@ -35,9 +33,8 @@ ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
 
 let livesDiv = document.getElementById("lives");
 livesDiv.style.top = `${cords.top}px`;
-livesDiv.style.left = `${
-  cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
-}px`;
+livesDiv.style.left = `${cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
+  }px`;
 /***********************************************/
 
 var index = 0;
@@ -95,7 +92,11 @@ function throttle(func, interval) {
   };
 }
 /*****************LEVEL************************/
+let requestID_MoveEnemy;
 function levelUP() {
+  if (!requestID_MoveEnemy) {
+    cancelAnimationFrame(requestID_MoveEnemy);
+  }
   if (LEVELE === 5) {
     gameOver("YOU WIN!!");
     return;
@@ -116,6 +117,7 @@ function levelUP() {
     enemysDiv.appendChild(enemy);
   }
   levelDiv.textContent = "LEVEL " + LEVELE.toString();
+  requestID_MoveEnemy = requestAnimationFrame(moveEnemys);
 }
 /**********************************************/
 
@@ -136,14 +138,14 @@ function moveEnemys() {
   if (enemysDiv.offsetTop + enemysDiv.offsetHeight > ship.offsetTop) {
     console.log("game over");
     gameOver("GAME OVER");
-    cancelAnimationFrame(moveEnemys);
     return;
   }
-  requestAnimationFrame(moveEnemys);
+  requestID_MoveEnemy = requestAnimationFrame(moveEnemys);
 }
-//  requestAnimationFrame(moveEnemys);
+
+
 levelUP();
-requestAnimationFrame(moveEnemys);
+
 
 /*******************************************/
 window.addEventListener("keydown", (event) => {
@@ -210,11 +212,12 @@ function move(bullet) {
 /*******************************************/
 var isMoving = false;
 var direction;
+let requestID_MoveShip
 window.addEventListener("keydown", (event) => {
   if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !isMoving) {
     direction = event.key;
     isMoving = true;
-    requestAnimationFrame(moveShip);
+    requestID_MoveShip = requestAnimationFrame(moveShip);
   }
 });
 
@@ -222,6 +225,9 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => {
   if (event.key == direction) {
     isMoving = false;
+    if (!requestID_MoveShip) {
+      cancelAnimationFrame(requestID_MoveShip)
+    }
   }
 });
 
@@ -240,11 +246,12 @@ function moveShip() {
     ship.style.left = `${ship.offsetLeft + shipSpeed}px`;
   }
 
-  requestAnimationFrame(moveShip);
+  requestID_MoveShip = requestAnimationFrame(moveShip);
 }
 
 /*************************************/
 function Restart() {
+  cancelAnimationFrame(requestID_MoveEnemy);
   distroy(".enemy");
   if (isPaused) {
     isPaused = false;
@@ -263,11 +270,12 @@ function Restart() {
   ScoreBar.textContent = "0000";
   divText.style.visibility = "hidden";
   levelUP();
-  requestAnimationFrame(moveEnemys);
+
 }
 /***********************************/
 let btnPR = document.querySelector("#psCn");
 function Pause_Continue() {
+  cancelAnimationFrame(requestID_MoveEnemy)
   if (isGamrOver) {
     return;
   }
@@ -353,7 +361,7 @@ function moveBulletEnemy() {
       bullet.remove();
     }
   });
-  if (bullets.length > 0) {
-    requestAnimationFrame(moveBulletEnemy);
-  }
+
+  requestAnimationFrame(moveBulletEnemy);
+
 }
