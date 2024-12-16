@@ -67,7 +67,6 @@ function animateText() {
   }
   setTimeout(animateText, 300);
 }
-
 /************ restrt pause contunie positon************** */
 let RestartBtn = document.querySelector("#restart");
 RestartBtn.style.right = `${cords.left}px`;
