@@ -134,7 +134,7 @@ function moveEnemys() {
   ) {
     enemySpeed *= -1;
   }
-  enemysDiv.style.top = `${enemysDiv.offsetTop + 0.5}px`;
+  //enemysDiv.style.top = `${enemysDiv.offsetTop + 0.5}px`;
 
   enemysDiv.style.left = `${enemysDiv.offsetLeft + enemySpeed}px`;
   if (enemysDiv.offsetTop + enemysDiv.offsetHeight > ship.offsetTop) {
@@ -167,49 +167,60 @@ function isColliding(bullet, enemy) {
 }
 
 /*******************************************/
-
+let nbrB = 0;
 const bulletSpeed = 8;
 function shut() {
   let bullet = document.createElement("div");
   bullet.classList.add("bullets");
+  bullet.classList.add("Ybullets");
   bullet.style.left = `${ship.offsetLeft + 45}px`;
   bullet.style.top = `${ship.offsetTop}px`;
   board.appendChild(bullet);
-  move(bullet);
+  nbrB++;
+  if (nbrB == 1) {
+    move();
+  }
 }
 var throttledShut = throttle(shut, 500);
-function move(bullet) {
-  function animate() {
-    if (!bullet) {
-      return;
-    }
-    if (bullet.offsetTop > cords.top) {
-      bullet.style.top = `${bullet.offsetTop - bulletSpeed}px`;
-      document.querySelectorAll(".enemy").forEach((e) => {
-        if (e.style.visibility != "hidden") {
-          if (isColliding(bullet, e)) {
-            e.classList.remove("exist");
-            score += 5;
-            ScoreBar.textContent = String(score).padStart(4, "0");
-            e.style.visibility = "hidden";
-            bullet.remove();
-            enemyNBR--;
-            if (enemyNBR == 0) {
-              console.log("levelUp");
-              cancelAnimationFrame(requestID_MoveEnemy);
-              levelUP();
-              return;
+let requestID_MoveBullets;
+function move() {
+  if ( isPaused || nbrB == 0) {
+    cancelAnimationFrame(requestID_MoveBullets);
+    return;
+  }
+  let bullets = document.getElementsByClassName("Ybullets");
+  if (bullets) {
+    Array.from(bullets).forEach((bullet) => {
+      if (bullet.offsetTop > cords.top) {
+        bullet.style.top = `${bullet.offsetTop - bulletSpeed}px`;
+        document.querySelectorAll(".enemy").forEach((e) => {
+          if (e.style.visibility != "hidden") {
+            if (isColliding(bullet, e)) {
+              e.classList.remove("exist");
+              score += 5;
+              ScoreBar.textContent = String(score).padStart(4, "0");
+              e.style.visibility = "hidden";
+              bullet.remove();
+              nbrB--;
+              enemyNBR--;
+              if (enemyNBR == 0) {
+                console.log("levelUp");
+                cancelAnimationFrame(requestID_MoveEnemy);
+                levelUP();
+                return;
+              }
             }
           }
-        }
-      });
-      requestAnimationFrame(animate);
-    } else {
-      bullet.remove();
-      return;
-    }
+        });
+      } else {
+        bullet.remove();
+        nbrB--;
+        return;
+      }
+    });
+
+    requestID_MoveBullets = requestAnimationFrame(move);
   }
-  requestAnimationFrame(animate);
 }
 /*******************************************/
 var isMoving = false;
@@ -271,6 +282,8 @@ function Restart() {
   score = 0;
   ScoreBar.textContent = "0000";
   divText.style.visibility = "hidden";
+  nbr = 0;
+  nbrB = 0;
   levelUP();
 }
 /***********************************/
@@ -286,6 +299,7 @@ function Pause_Continue() {
     PlayBtn.style.visibility = "hidden";
     moveEnemys();
     moveBulletEnemy();
+    move();
   } else {
     PauseBtn.style.visibility = "hidden";
     PlayBtn.style.visibility = "visible";
@@ -298,10 +312,12 @@ function gameOver(message) {
   isGamrOver = true;
   divText.style.visibility = "visible";
   enemysDiv.innerHTML = "";
-  distroy(".bullets");
   spanText.textContent = "";
   text = message;
   animateText(message);
+  nbr = 0;
+  nbrB = 0;
+  distroy(".bullets");
 }
 
 /**************************************/
@@ -311,6 +327,7 @@ function distroy(name) {
   });
 }
 /*******************************/
+let nbr = 0;
 setInterval(() => {
   if (isPaused || isGamrOver) {
     return;
@@ -324,41 +341,51 @@ setInterval(() => {
   b.classList.add("bullets");
   b.classList.add("Xbullets");
 
-  b.style.left = `${a.offsetLeft}px`;
+  let aa = a.getBoundingClientRect();
+  b.style.left = `${aa.left}px`;
 
-  b.style.top = `${a.offsetTop}px`;
+  b.style.top = `${aa.top}px`;
 
-  enemysDiv.appendChild(b);
-
-  moveBulletEnemy(b);
+  nbr++;
+  board.appendChild(b);
+  if (nbr == 1) {
+    moveBulletEnemy();
+  }
 }, 2000);
 
 const getNb = (n) => {
   return Math.floor(Math.random() * n);
 };
-let requestID;
-function moveBulletEnemy(bullet) {
-  if (isGamrOver || isPaused) {
+let requestID_MoveEnemyBullets;
+function moveBulletEnemy() {
+  if (isGamrOver || isPaused || nbr == 0) {
+    cancelAnimationFrame(requestID_MoveEnemyBullets);
     return;
   }
 
-  if (bullet.offsetTop + bullet.offsetHeight < cords.bottom) {
-    bullet.style.top = `${bullet.offsetTop + 1}px`;
-    if (isColliding(bullet, ship)) {
-      bullet.remove();
-      lives = document.querySelectorAll(".lives");
-      lives[0].remove();
-      if (lives.length == 1) {
-        cancelAnimationFrame(requestID);
-        gameOver("GAME OVER");
-        return;
+  let bullets = document.getElementsByClassName("Xbullets");
+  if (bullets) {
+    Array.from(bullets).forEach((bullet) => {
+      if (bullet.offsetTop + bullet.offsetHeight < cords.bottom) {
+        bullet.style.top = `${bullet.offsetTop + 3}px`;
+        if (isColliding(bullet, ship)) {
+          bullet.remove();
+          nbr--;
+          lives = document.querySelectorAll(".lives");
+          lives[0].remove();
+          if (lives.length == 1) {
+            cancelAnimationFrame(requestID_MoveEnemyBullets);
+            gameOver("GAME OVER");
+            return;
+          }
+        }
+      } else {
+        bullet.remove();
+        nbr--;
       }
-    }
-  } else {
-    cancelAnimationFrame(requestID);
-    bullet.remove();
-    return;
+    });
   }
-
-  requestID = requestAnimationFrame(moveBulletEnemy.bind(null, bullet));
+  if (nbr != 0) {
+    requestID_MoveEnemyBullets = requestAnimationFrame(moveBulletEnemy);
+  }
 }
