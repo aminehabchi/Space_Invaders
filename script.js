@@ -97,7 +97,7 @@ function levelUP() {
   if (!requestID_MoveEnemy) {
     cancelAnimationFrame(requestID_MoveEnemy);
   }
-  if (LEVEL === 8) {
+  if (LEVEL === 1) {
     gameOver("YOU WIN!!");
     return;
   }
@@ -285,7 +285,7 @@ function Restart() {
   }
   lives = document.querySelectorAll(".lives");
   isGamrOver = false;
-  LEVELE = 0;
+  LEVEL = 0;
   enemyLevel = 0;
   score = 0;
   ScoreBar.textContent = "0000";
