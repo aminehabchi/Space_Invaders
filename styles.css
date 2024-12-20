@@ -74,20 +74,20 @@ h1 {
 }
 
 .enemy {
-    height: 22px;
+    height: 25px;
     width: 40px;
     background-image: url('InvaderB1.png');
     background-size: cover;
-    margin-left: 5px;
 }
 
 #enemysDiv {
     position: absolute;
     width: 500px;
     height: 500px;
+    border: 1px solid red;
     display: grid;
     grid-template-columns: repeat(8, 62.5px);
-    grid-template-rows: repeat(8, 62.5px);
+    grid-template-rows: repeat(8, 40px);
     justify-items: center;
 }
 

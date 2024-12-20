@@ -1,5 +1,5 @@
 var score = 0;
-var LEVELE = 0;
+var LEVEL = 0;
 var enemyLevel = 0;
 var enemyNBR = 0
 var isPaused = false;
@@ -97,15 +97,20 @@ function levelUP() {
   if (!requestID_MoveEnemy) {
     cancelAnimationFrame(requestID_MoveEnemy);
   }
-  if (LEVELE === 8) {
+  if (LEVEL === 8) {
     gameOver("YOU WIN!!");
     return;
   }
+  LEVEL++;
+
   enemysDiv.innerHTML = "";
   distroy(".bullets");
   enemysDiv.style.left = `${cords.left}px`;
   enemysDiv.style.top = `${cords.top + 60}px`;
-  LEVELE++;
+
+  enemysDiv.style.gridTemplateRows = `repeat(${LEVEL}, 62.5px);`
+  enemysDiv.style.height = `${40 * LEVEL}px`
+
   enemyLevel += 8;
   enemyNBR = enemyLevel;
   isPaused = false;
@@ -116,7 +121,7 @@ function levelUP() {
     enemy.id = i.toString();
     enemysDiv.appendChild(enemy);
   }
-  levelDiv.textContent = "LEVEL " + LEVELE.toString();
+  levelDiv.textContent = "LEVEL " + LEVEL.toString();
   requestID_MoveEnemy = requestAnimationFrame(moveEnemys);
 }
 /**********************************************/
@@ -131,6 +136,7 @@ function moveEnemys() {
     enemysDiv.offsetLeft < cords.left
   ) {
     enemySpeed *= -1;
+    enemysDiv.style.top = `${enemysDiv.offsetTop + 1}px`
   }
 
   enemysDiv.style.left = `${enemysDiv.offsetLeft + enemySpeed}px`;
