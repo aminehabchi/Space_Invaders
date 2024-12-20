@@ -1,7 +1,7 @@
 var score = 0;
 var LEVELE = 0;
-var enemyLevel = 1;
-var enemyNBR = 1;
+var enemyLevel = 0;
+var enemyNBR = 0
 var isPaused = false;
 var isGamrOver = false;
 let ScoreBar = document.getElementById("score");
@@ -20,9 +20,8 @@ divText.style.height = `${cords.height}px`;
 divText.style.visibility = "hidden";
 
 let levelDiv = document.getElementById("level");
-levelDiv.style.left = `${
-  board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
-}px`;
+levelDiv.style.left = `${board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
+  }px`;
 
 levelDiv.style.top = `${cords.top}px`;
 let ship = document.createElement("div");
@@ -34,16 +33,15 @@ ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
 
 let livesDiv = document.getElementById("lives");
 livesDiv.style.top = `${cords.top}px`;
-livesDiv.style.left = `${
-  cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
-}px`;
+livesDiv.style.left = `${cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
+  }px`;
 /***********************************************/
 
 var index = 0;
 var text = "";
 var spanText = document.getElementById("text");
 var istyping = true;
-
+let timeoutId;
 function animateText() {
   if (!isGamrOver) {
     return;
@@ -53,7 +51,7 @@ function animateText() {
     index++;
     if (index == text.length) {
       istyping = false;
-      setTimeout(animateText, 1000);
+      timeoutId = setTimeout(animateText, 1000);
       return;
     }
   } else if (!istyping) {
@@ -61,11 +59,11 @@ function animateText() {
     index--;
     if (index == 0) {
       istyping = true;
-      setTimeout(animateText, 1000);
+      timeoutId = setTimeout(animateText, 1000);
       return;
     }
   }
-  setTimeout(animateText, 300);
+  timeoutId = setTimeout(animateText, 300);
 }
 /************ restrt pause contunie positon************** */
 let RestartBtn = document.querySelector("#restart");
@@ -99,7 +97,7 @@ function levelUP() {
   if (!requestID_MoveEnemy) {
     cancelAnimationFrame(requestID_MoveEnemy);
   }
-  if (LEVELE === 5) {
+  if (LEVELE === 8) {
     gameOver("YOU WIN!!");
     return;
   }
@@ -108,7 +106,7 @@ function levelUP() {
   enemysDiv.style.left = `${cords.left}px`;
   enemysDiv.style.top = `${cords.top + 60}px`;
   LEVELE++;
-  enemyLevel++;
+  enemyLevel += 8;
   enemyNBR = enemyLevel;
   isPaused = false;
   for (let i = 0; i < enemyLevel; i++) {
@@ -134,7 +132,6 @@ function moveEnemys() {
   ) {
     enemySpeed *= -1;
   }
-  //enemysDiv.style.top = `${enemysDiv.offsetTop + 0.5}px`;
 
   enemysDiv.style.left = `${enemysDiv.offsetLeft + enemySpeed}px`;
   if (enemysDiv.offsetTop + enemysDiv.offsetHeight > ship.offsetTop) {
@@ -184,7 +181,7 @@ function shut() {
 var throttledShut = throttle(shut, 500);
 let requestID_MoveBullets;
 function move() {
-  if ( isPaused || nbrB == 0) {
+  if (isPaused || nbrB == 0) {
     cancelAnimationFrame(requestID_MoveBullets);
     return;
   }
@@ -265,6 +262,11 @@ function moveShip() {
 /*************************************/
 function Restart() {
   cancelAnimationFrame(requestID_MoveEnemy);
+
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
+  spanText.textContent = ""
   enemysDiv.innerHTML = "";
   if (isPaused) {
     isPaused = false;
@@ -278,7 +280,7 @@ function Restart() {
   lives = document.querySelectorAll(".lives");
   isGamrOver = false;
   LEVELE = 0;
-  enemyLevel = 1;
+  enemyLevel = 0;
   score = 0;
   ScoreBar.textContent = "0000";
   divText.style.visibility = "hidden";
@@ -341,10 +343,10 @@ setInterval(() => {
   b.classList.add("bullets");
   b.classList.add("Xbullets");
 
-  let aa = a.getBoundingClientRect();
-  b.style.left = `${aa.left}px`;
+  let cord = a.getBoundingClientRect();
+  b.style.left = `${cord.left + existEnemy[0].offsetWidth / 2}px`;
 
-  b.style.top = `${aa.top}px`;
+  b.style.top = `${cord.top + existEnemy[0].offsetHeight}px`;
 
   nbr++;
   board.appendChild(b);
@@ -389,3 +391,25 @@ function moveBulletEnemy() {
     requestID_MoveEnemyBullets = requestAnimationFrame(moveBulletEnemy);
   }
 }
+
+/**********************************/
+let bl = false;
+setInterval(function animate() {
+  let existEnemy = document.querySelectorAll(".exist");
+  if (!existEnemy) {
+    return;
+  }
+  existEnemy.forEach((e) => {
+    if (bl) {
+      e.style.backgroundImage = "url('InvaderB1.png')";
+    } else {
+      e.style.backgroundImage = "url('InvaderB2.png')";
+    }
+  })
+  if (bl) {
+    bl = false
+  } else {
+    bl = true
+  }
+
+}, 500)

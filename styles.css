@@ -40,46 +40,55 @@ h1 {
 }
 
 .bullets {
-    background-color: red;
-    width: 15px;
+
+    width: 5px;
     height: 15px;
     border-radius: 50%;
     position: absolute;
 }
 
+.Xbullets {
+    background-color: rgb(255, 255, 255);
+}
+
+.Ybullets {
+    background-color: rgb(60, 255, 0);
+}
+
 #score {
-    color: blanchedalmond;
+    color: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
+    width: 70px;
     height: 30px;
     font-size: 20px;
 }
 
 #level {
+    color: rgb(255, 255, 255);
     position: absolute;
     width: 80px;
     height: 30px;
-
     font-size: 20px;
 }
 
 .enemy {
-    height: 30px;
-    width: 50px;
-    background-image: url('alien-cyan.png');
+    height: 22px;
+    width: 40px;
+    background-image: url('InvaderB1.png');
     background-size: cover;
-
+    margin-left: 5px;
 }
 
 #enemysDiv {
     position: absolute;
-    width: 600px;
-    height: auto;
-    display: flex;
-    justify-content: center;
-
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template-columns: repeat(8, 62.5px);
+    grid-template-rows: repeat(8, 62.5px);
+    justify-items: center;
 }
 
 #level {
