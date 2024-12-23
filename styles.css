@@ -115,3 +115,28 @@ h1 {
     justify-content: center;
     align-items: center;
 }
+#Walls{
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+}
+
+.wall {
+    width: 100px;
+    height: 60px;
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(10, 10px);
+    grid-template-rows: repeat(6, 10px);
+}
+
+.pixel {
+    width: 10px;
+    height: 10px;
+    background-color: rgb(60, 255, 0);
+}
+
+.empty {
+    grid-row: 4/7;
+    grid-column: 4/8;
+}
