@@ -1,7 +1,7 @@
 var score = 0;
 var LEVEL = 0;
 var enemyLevel = 0;
-var enemyNBR = 0
+var enemyNBR = 0;
 var isPaused = false;
 var isGamrOver = false;
 let ScoreBar = document.getElementById("score");
@@ -20,8 +20,9 @@ divText.style.height = `${cords.height}px`;
 divText.style.visibility = "hidden";
 
 let levelDiv = document.getElementById("level");
-levelDiv.style.left = `${board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
-  }px`;
+levelDiv.style.left = `${
+  board.offsetWidth + levelDiv.offsetLeft - levelDiv.offsetWidth
+}px`;
 
 levelDiv.style.top = `${cords.top}px`;
 let ship = document.createElement("div");
@@ -33,17 +34,17 @@ ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
 
 let livesDiv = document.getElementById("lives");
 livesDiv.style.top = `${cords.top}px`;
-livesDiv.style.left = `${cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
-  }px`;
+livesDiv.style.left = `${
+  cords.left + cords.width / 2 - levelDiv.offsetWidth / 2
+}px`;
 
-
-let Walls = document.createElement('div')
-Walls.style.width = `${cords.width}px`
-Walls.style.height = '60px'
-Walls.style.left = `${cords.left}px`
-Walls.style.top = `${cords.top + 500}px`
-Walls.id = 'Walls'
-board.appendChild(Walls)
+let Walls = document.createElement("div");
+Walls.style.width = `${cords.width}px`;
+Walls.style.height = "60px";
+Walls.style.left = `${cords.left}px`;
+Walls.style.top = `${cords.top + 500}px`;
+Walls.id = "Walls";
+board.appendChild(Walls);
 /***********************************************/
 
 var index = 0;
@@ -111,7 +112,7 @@ function levelUP() {
     return;
   }
   if (LEVEL == 0) {
-    addWalls()
+    addWalls();
   }
   LEVEL++;
 
@@ -120,8 +121,8 @@ function levelUP() {
   enemysDiv.style.left = `${cords.left}px`;
   enemysDiv.style.top = `${cords.top + 60}px`;
 
-  enemysDiv.style.gridTemplateRows = `repeat(${LEVEL}, 62.5px);`
-  enemysDiv.style.height = `${40 * LEVEL}px`
+  enemysDiv.style.gridTemplateRows = `repeat(${LEVEL}, 62.5px);`;
+  enemysDiv.style.height = `${40 * LEVEL}px`;
 
   enemyLevel += 8;
   enemyNBR = enemyLevel;
@@ -148,16 +149,21 @@ function moveEnemys() {
     enemysDiv.offsetLeft < cords.left
   ) {
     enemySpeed *= -1;
-    enemysDiv.style.top = `${enemysDiv.offsetTop + 1}px`
+    enemysDiv.style.top = `${enemysDiv.offsetTop + 1}px`;
   }
 
   enemysDiv.style.left = `${enemysDiv.offsetLeft + enemySpeed}px`;
   if (enemysDiv.offsetTop + enemysDiv.offsetHeight > ship.offsetTop) {
     console.log("game over");
     gameOver("GAME OVER");
+    cancelAnimationFrame(requestID_MoveEnemy);
     return;
   }
-  requestID_MoveEnemy = requestAnimationFrame(moveEnemys);
+  if (!isPaused || !isGamrOver) {
+    requestID_MoveEnemy = requestAnimationFrame(moveEnemys);
+  } else {
+    cancelAnimationFrame(requestID_MoveEnemy);
+  }
 }
 
 levelUP();
@@ -190,30 +196,37 @@ function shut() {
   bullet.style.left = `${ship.offsetLeft + 45}px`;
   bullet.style.top = `${ship.offsetTop}px`;
   board.appendChild(bullet);
-  moveBullet(bullet)
+  moveBullet(bullet);
 }
 var throttledShut = throttle(shut, 500);
-let requestID_MoveBullets;
 function move() {
-  let bulletY = document.querySelectorAll('.Ybullets')
+  let bullets = document.querySelectorAll(".Xbullets");
+  if (bullets) {
+    bullets.forEach((e) => {
+      moving(e);
+    });
+  }
+
+  let bulletY = document.querySelectorAll(".Ybullets");
   if (bulletY) {
     bulletY.forEach((b) => {
-      moveBullet(b)
-    })
+      moveBullet(b);
+    });
   }
 }
+let requestID_MoveBullets;
 function moveBullet(bullet) {
   if (isPaused || isGamrOver) {
-    return
+    return;
   }
-  let pixels = document.querySelectorAll('.existsPixel')
+  let pixels = document.querySelectorAll(".existsPixel");
 
   for (let i = 0; i < pixels.length; i++) {
     if (isColliding(bullet, pixels[i])) {
       bullet.remove();
-      pixels[i].style.visibility = "hidden"
-      pixels[i].classList.remove('existsPixel')
-      return
+      pixels[i].style.visibility = "hidden";
+      pixels[i].classList.remove("existsPixel");
+      return;
     }
   }
 
@@ -230,6 +243,7 @@ function moveBullet(bullet) {
           enemyNBR--;
           if (enemyNBR == 0) {
             console.log("levelUp");
+            cancelAnimationFrame(requestID_MoveEnemy);
             levelUP();
             return;
           }
@@ -240,7 +254,7 @@ function moveBullet(bullet) {
     bullet.remove();
     return;
   }
-  requestAnimationFrame(() => moveBullet(bullet));
+  requestID_MoveBullets = requestAnimationFrame(() => moveBullet(bullet));
 }
 
 /*******************************************/
@@ -286,12 +300,12 @@ function moveShip() {
 /*************************************/
 function Restart() {
   cancelAnimationFrame(requestID_MoveEnemy);
-  distroy('.will')
-  addWalls()
+  distroy(".will");
+  addWalls();
   if (timeoutId) {
     clearTimeout(timeoutId);
   }
-  spanText.textContent = ""
+  spanText.textContent = "";
   enemysDiv.innerHTML = "";
   if (isPaused) {
     isPaused = false;
@@ -309,13 +323,11 @@ function Restart() {
   score = 0;
   ScoreBar.textContent = "0000";
   divText.style.visibility = "hidden";
-  nbr = 0;
   levelUP();
 }
 /***********************************/
 let btnPR = document.querySelector("#psCn");
 function Pause_Continue() {
-  cancelAnimationFrame(requestID_MoveEnemy);
   if (isGamrOver) {
     return;
   }
@@ -324,7 +336,6 @@ function Pause_Continue() {
     PauseBtn.style.visibility = "visible";
     PlayBtn.style.visibility = "hidden";
     moveEnemys();
-    moveBulletEnemy();
     move();
   } else {
     PauseBtn.style.visibility = "hidden";
@@ -353,7 +364,6 @@ function distroy(name) {
   });
 }
 /*******************************/
-let nbr = 0;
 setInterval(() => {
   if (isPaused || isGamrOver) {
     return;
@@ -372,72 +382,53 @@ setInterval(() => {
 
   b.style.top = `${cord.top + existEnemy[0].offsetHeight}px`;
 
-  nbr++;
   board.appendChild(b);
-  if (nbr == 1) {
-    moveBulletEnemy();
-  }
+
+  moving(b);
 }, 2000);
 
 const getNb = (n) => {
   return Math.floor(Math.random() * n);
 };
 let requestID_MoveEnemyBullets;
-function moveBulletEnemy() {
-  if (isGamrOver || isPaused || nbr == 0) {
-    cancelAnimationFrame(requestID_MoveEnemyBullets);
+function moving(bullet) {
+  if (!bullet || isGamrOver || isPaused) {
     return;
   }
+  let pixels = document.querySelectorAll(".existsPixel");
+  pixels.forEach((e) => {
+    if (isColliding(bullet, e)) {
+      bullet.remove();
+      e.style.visibility = "hidden";
+      e.classList.remove("existsPixel");
+      return;
+    }
+  });
+  if (bullet.offsetTop + bullet.offsetHeight < cords.bottom) {
+    bullet.style.top = `${bullet.offsetTop + 3}px`;
+    if (isColliding(bullet, ship)) {
+      bullet.remove();
 
-  let bullets = document.getElementsByClassName("Xbullets");
-  if (bullets) {
-    Array.from(bullets).forEach((bullet) => {
-      let isDeleted = false;
-      let pixels = document.querySelectorAll('.existsPixel')
-      Array.from(pixels).forEach((e) => {
-        if (isColliding(bullet, e)) {
-          bullet.remove();
-          nbr--;
-          e.style.visibility = "hidden"
-          e.classList.remove('existsPixel')
-          isDeleted = true;
-          return
-        }
-      })
-
-      if (!isDeleted) {
-        if (bullet && bullet.offsetTop + bullet.offsetHeight < cords.bottom) {
-          bullet.style.top = `${bullet.offsetTop + 3}px`;
-          if (isColliding(bullet, ship)) {
-            bullet.remove();
-            nbr--;
-            lives = document.querySelectorAll(".lives");
-            lives[0].remove();
-            if (lives.length == 1) {
-              cancelAnimationFrame(requestID_MoveEnemyBullets);
-              gameOver("GAME OVER");
-              return;
-            }
-          }
-        } else if (bullet) {
-          bullet.remove();
-          nbr--;
-        }
+      lives = document.querySelectorAll(".lives");
+      lives[0].remove();
+      if (lives.length == 1) {
+        cancelAnimationFrame(requestID_MoveEnemyBullets);
+        gameOver("GAME OVER");
       }
-    });
+      return;
+    }
+  } else if (bullet) {
+    bullet.remove();
+    return;
   }
-  if (nbr != 0) {
-    requestID_MoveEnemyBullets = requestAnimationFrame(moveBulletEnemy);
-  } else {
-    cancelAnimationFrame(requestID_MoveEnemyBullets)
-  }
+  requestAnimationFrame(() => moving(bullet));
 }
 
 /**********************************/
 let bl = false;
 setInterval(function animate() {
   if (isGamrOver || isPaused) {
-    return
+    return;
   }
   let existEnemy = document.querySelectorAll(".exist");
   if (!existEnemy) {
@@ -449,34 +440,34 @@ setInterval(function animate() {
     } else {
       e.style.backgroundImage = "url('InvaderB2.png')";
     }
-  })
+  });
   if (bl) {
-    bl = false
+    bl = false;
   } else {
-    bl = true
+    bl = true;
   }
-}, 500)
+}, 500);
 
 /*************************************/
 function createWall() {
-  let wall = document.createElement('div')
-  wall.classList.add('wall')
-  let empty = document.createElement('div')
-  empty.classList.add('empty')
-  wall.appendChild(empty)
+  let wall = document.createElement("div");
+  wall.classList.add("wall");
+  let empty = document.createElement("div");
+  empty.classList.add("empty");
+  wall.appendChild(empty);
   for (let i = 0; i < 48; i++) {
-    let pixel = document.createElement('div')
-    pixel.classList.add('pixel')
-    pixel.classList.add('existsPixel')
-    wall.appendChild(pixel)
+    let pixel = document.createElement("div");
+    pixel.classList.add("pixel");
+    pixel.classList.add("existsPixel");
+    wall.appendChild(pixel);
   }
-  return wall
+  return wall;
 }
 function addWalls() {
-  let Walls = document.getElementById('Walls')
-  Walls.innerHTML = ''
+  let Walls = document.getElementById("Walls");
+  Walls.innerHTML = "";
   for (let i = 0; i < 3; i++) {
-    let wall = createWall()
-    Walls.appendChild(wall)
+    let wall = createWall();
+    Walls.appendChild(wall);
   }
 }
