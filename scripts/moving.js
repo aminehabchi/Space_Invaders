@@ -9,7 +9,7 @@ window.addEventListener("keydown", (event) => {
     return;
   }
   if (event.key == " ") {
-    throttledShut();
+    if (!game.isGamrOver) throttledShut();
   }
 });
 
@@ -18,7 +18,7 @@ export function shut() {
   bullet.classList.add("bullets");
   bullet.classList.add("Ybullets");
   let cords_ship = ship.getBoundingClientRect();
-  bullet.style.left = `${cords_ship.left + 45}px`;
+  bullet.style.left = `${cords_ship.left+35}px`;
   bullet.style.top = `${cords_ship.top}px`;
   elements.board.appendChild(bullet);
   moveBullet(bullet, 0);
@@ -88,7 +88,7 @@ export function moveEnemys() {
     ship.offsetTop
   ) {
     console.log("game over");
-    gameOver("GAME OVER");
+    gameOver("GAME OVER",0);
     cancelAnimationFrame(requestID.requestID_MoveEnemy);
     return;
   }
@@ -106,7 +106,7 @@ window.addEventListener("keydown", (event) => {
   if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !isMoving) {
     direction = event.key;
     isMoving = true;
-    requestID.requestID_MoveShip = requestAnimationFrame(moveShip);
+    if (!game.isGamrOver) requestID.requestID_MoveShip = requestAnimationFrame(moveShip);
   }
 });
 
@@ -191,7 +191,7 @@ function moving(bullet, x) {
       elements.lives = document.querySelectorAll(".lives");
       elements.lives[0].remove();
       if (elements.lives.length <= 1) {
-        main.gameOver("GAME OVER");
+        main.gameOver("GAME OVER",0);
       }
       return;
     }

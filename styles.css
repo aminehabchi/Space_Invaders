@@ -5,7 +5,7 @@ body {
     flex-direction: column;
     align-items: center;
 
-    background-image: url('space.jpg');
+    background-image: url('s.webp');
     background-size: cover;
     color: blanchedalmond;
     justify-content: center;    
@@ -34,14 +34,6 @@ h1 {
 /**********************************/
 
 
-
-
-
-
-
-
-
-
 .icons {
     position: absolute;
     color: blanchedalmond;
@@ -50,17 +42,8 @@ h1 {
     cursor: pointer;
 }
 
-
-#board {
-    height: 700px;
-    width: 700px;
-    margin: 0;
-    padding: 0;
-}
-
 #ship {
     position: absolute;
-
     height: 100px;
     width: 100px;
     background-image: url('sh.png');
@@ -68,39 +51,48 @@ h1 {
 }
 
 .bullets {
-    width: 8px;
-    height: 15px;
+    width: 20px;
+    height: 30px;
     border-radius: 50%;
     position: absolute;
-    
+    background-size: cover;
 }
 
 .Xbullets {
-    background-color: rgb(255, 255, 255);
+   background-image: url("a.png");
 }
 
 .Ybullets {
-    
-    background-color: rgb(30, 255, 0);
+   background-image: url("22.png");
 }
 
-#score {
-    color: rgb(255, 255, 255);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 70px;
-    height: 30px;
-    font-size: 20px;
+#boardHeader {
+    width: 100%;
+    display: flex; /* Enables flexbox layout */
+    justify-content: space-around; /* Distributes items with space between */
+    align-items: center; /* Vertically centers the items */
+    padding: 10px 20px; /* Adds padding around the header */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    color: white; /* Sets the text color for visibility */
+    font-size: 18px; /* Sets a uniform font size */
 }
 
-#level {
-    color: rgb(255, 255, 255);
-    position: absolute;
-    width: 80px;
-    height: 30px;
-    font-size: 20px;
+#board {
+    height: 700px;
+    width: 700px;
+    margin: 0 auto;
+    padding: 0;
+    background-color: rgb(0, 0, 0);
+   /** box-shadow: 0 5px 10px 0 rgba(102, 102, 102, 0.37);**/
 }
+
+#lives {
+    margin-top: 100px;
+    display: flex; 
+    gap: 5px;
+}
+
+
 
 .enemy {
     height: 25px;
@@ -163,7 +155,7 @@ h1 {
 .pixel {
     width: 10px;
     height: 10px;
-    background-color: rgb(255, 255, 255);
+    background: rgba(61, 212, 86, 0.74);
 }
 
 .empty {
@@ -179,8 +171,8 @@ h1 {
     align-items: center;
     justify-content: space-evenly;
     position: absolute;
-    background: rgba( 255, 255, 255, 0.25 );
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    background: rgba(11, 116, 29, 0.25);
+    box-shadow: 0 5px 32px 0 rgba(46, 235, 36, 0.37);
     backdrop-filter: blur( 4px );
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
@@ -196,5 +188,5 @@ h1 {
 }
 
 .btn:hover {
-    box-shadow: 0 8px 32px 0 rgb(31, 38, 135);
+    box-shadow: 0 8px 32px 0 rgb(108, 242, 90);
 }

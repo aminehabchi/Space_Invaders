@@ -9,6 +9,7 @@ export var game = {
   isPaused: false,
   isGamrOver: false,
   score: 0,
+  esc : 0,
 };
 export var speed = {
   bulletSpeed: 8,
@@ -18,6 +19,7 @@ export var speed = {
 };
 
 export var elements = {
+  timer : document.getElementById("timer"),
   ScoreBar: document.getElementById("score"),
   menu: document.querySelector("#menu"),
   enemysDiv: document.getElementById("enemysDiv"),
@@ -49,13 +51,7 @@ elements.divText.style.width = `${cords.width}px`;
 elements.divText.style.height = `${cords.height}px`;
 elements.divText.style.visibility = "hidden";
 
-elements.levelDiv.style.left = `${
-  elements.board.offsetWidth +
-  elements.levelDiv.offsetLeft -
-  elements.levelDiv.offsetWidth
-}px`;
 
-elements.levelDiv.style.top = `${cords.top}px`;
 export let ship = document.createElement("div");
 ship.id = "ship";
 elements.board.appendChild(ship);
@@ -63,11 +59,40 @@ elements.board.appendChild(ship);
 ship.style.top = `${cords.height + cords.top - ship.offsetHeight - 30}px`;
 ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
 
-elements.livesDiv.style.top = `${cords.top}px`;
-elements.livesDiv.style.left = `${
-  cords.left + cords.width / 2 - elements.levelDiv.offsetWidth / 2
-}px`;
 
+
+let s = 0
+let interval
+function updatetimer() {
+  if (game.isGamrOver) {
+    clearInterval(interval)
+    timer.textContent = s
+    return
+  }
+    s++
+    if (s <10) {
+      timer.textContent = "0"+ s
+    }else{
+      timer.textContent = s
+    }
+}
+function starttimer() {
+    interval = setInterval(updatetimer, 1000)
+}
+elements.PauseBtn.addEventListener('click', () => {
+  clearInterval(interval)
+})
+
+document.getElementById("restart").addEventListener('click', () => {
+  clearInterval(interval)
+  s = 0
+  timer.textContent = "0"+s
+  starttimer()
+})
+document.getElementById("startCon").addEventListener('click', () => {
+  starttimer()
+})
+starttimer()
 elements.Walls.style.width = `${cords.width}px`;
 elements.Walls.style.height = "60px";
 elements.Walls.style.left = `${cords.left}px`;
@@ -76,7 +101,18 @@ elements.Walls.style.top = `${cords.top + 500}px`;
 /************ restrt pause contunie positon************** */
 
 elements.PauseBtn.onclick = Btn.Pause_Continue;
-
+document.addEventListener("keydown",(e)=> {
+  if (e.key == "Escape"){
+    game.esc++
+    if (game.esc % 2 !== 0){
+      Btn.Pause_Continue()
+      clearInterval(interval)
+    } else {
+      Btn.Pause_Continue();
+      starttimer();
+    }
+  }
+})
 document.getElementById("startCon").onclick = Btn.Pause_Continue;
 document.getElementById("restart").onclick = Btn.Restart;
 
@@ -88,8 +124,8 @@ elements.PauseBtn.style.top = `${cords.bottom}px`;
 export function levelUP() {
   cancelAnimationFrame(requestID.requestID_MoveEnemy);
 
-  if (game.LEVEL === 1) {
-    gameOver("YOU WIN!!");
+  if (game.LEVEL === 2) {
+    gameOver("YOU WIN!!",1);
     return;
   }
   if (game.LEVEL == 0) {
@@ -100,7 +136,7 @@ export function levelUP() {
   elements.enemysDiv.innerHTML = "";
   outil.distroy(".bullets");
   elements.enemysDiv.style.left = `${Math.ceil(cords.left)}px`;
-  elements.enemysDiv.style.top = `${cords.top + 60}px`;
+  elements.enemysDiv.style.top = `${cords.top + 100}px`;
 
   elements.enemysDiv.style.gridTemplateRows = `repeat(${game.LEVEL}, 62.5px);`;
   elements.enemysDiv.style.height = `${40 * game.LEVEL}px`;
@@ -123,13 +159,23 @@ export function levelUP() {
 levelUP();
 
 /****************************************/
-export function gameOver(message) {
+export function gameOver(message,win) {
+  const cursor = document.getElementById("cursor")
   game.isGamrOver = true;
   elements.divText.style.visibility = "visible";
   elements.enemysDiv.innerHTML = "";
   elements.spanText.textContent = "";
+  if (win == 1){
+  elements.spanText.style.color = "green"
+  cursor.style.color = "green"
+  }else {
+  elements.spanText.style.color = "red"
+  cursor.style.color = "red"
+  }
+
   animation.animate(message);
   outil.distroy(".bullets");
+  //elements.board.removeChild(ship)
 }
 
 /*************************************/

@@ -23,6 +23,7 @@ export function Restart() {
   game.LEVEL = 0;
   game.enemyLevel = 0;
   game.score = 0;
+  
   elements.ScoreBar.textContent = "0000";
   elements.divText.style.visibility = "hidden";
   elements.menu.style.display = "none";

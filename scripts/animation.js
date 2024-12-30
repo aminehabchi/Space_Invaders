@@ -29,6 +29,7 @@ export function animate(message) {
   istyping = true;
   text = message;
   index = 0;
+
   animateText();
 }
 function animateText() {
