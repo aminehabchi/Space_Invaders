@@ -148,7 +148,7 @@ setInterval(() => {
     return;
   }
   let existEnemy = document.querySelectorAll(".exist");
-  if (!existEnemy || game.enemyNBR == 0) {
+  if (existEnemy==undefined || game.enemyNBR == 0) {
     return;
   }
   let a = existEnemy[outil.getNb(existEnemy.length).toString()];

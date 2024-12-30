@@ -91,14 +91,14 @@ let interval
 function updatetimer() {
   if (game.isGamrOver) {
     clearInterval(interval)
-    timer.textContent = s
+    elements.timer.textContent = s
     return
   }
   s++
   if (s < 10) {
-    timer.textContent = "0" + s
+    elements.timer.textContent = "0" + s
   } else {
-    timer.textContent = s
+    elements.timer.textContent = s
   }
 }
 function starttimer() {
@@ -111,7 +111,7 @@ elements.PauseBtn.addEventListener('click', () => {
 document.getElementById("restart").addEventListener('click', () => {
   clearInterval(interval)
   s = 0
-  timer.textContent = "0" + s
+  elements.timer.textContent = "0" + s
   starttimer()
 })
 document.getElementById("startCon").addEventListener('click', () => {
@@ -121,7 +121,7 @@ starttimer()
 elements.Walls.style.width = `${cords.width}px`;
 elements.Walls.style.height = "60px";
 elements.Walls.style.left = `${cords.left}px`;
-elements.Walls.style.top = `${cords.top + cords.height * 0.7}px`;
+elements.Walls.style.top = `${cords.top + cords.height * 0.65}px`;
 
 /************ restrt pause contunie positon************** */
 
