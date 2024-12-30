@@ -8,7 +8,7 @@ body {
     background-image: url('s.webp');
     background-size: cover;
     color: blanchedalmond;
-    justify-content: center;    
+    justify-content: center;
 }
 
 h1 {
@@ -29,7 +29,7 @@ h1 {
     height: 100vh;
     backdrop-filter: blur(2px);
     z-index: -1;
-  }
+}
 
 /**********************************/
 
@@ -59,22 +59,36 @@ h1 {
 }
 
 .Xbullets {
-   background-image: url("a.png");
+    background-image: url("a.png");
 }
 
 .Ybullets {
-   background-image: url("22.png");
+    background-image: url("22.png");
 }
 
 #boardHeader {
     width: 100%;
-    display: flex; /* Enables flexbox layout */
-    justify-content: space-around; /* Distributes items with space between */
-    align-items: center; /* Vertically centers the items */
-    padding: 10px 20px; /* Adds padding around the header */
-    box-sizing: border-box; /* Ensures padding is included in the width */
-    color: white; /* Sets the text color for visibility */
-    font-size: 18px; /* Sets a uniform font size */
+    display: flex;
+    /* Enables flexbox layout */
+    justify-content: space-around;
+    /* Distributes items with space between */
+    align-items: center;
+    /* Vertically centers the items */
+    padding: 10px 20px;
+    /* Adds padding around the header */
+    box-sizing: border-box;
+    /* Ensures padding is included in the width */
+    color: white;
+    /* Sets the text color for visibility */
+    font-size: 18px;
+    /* Sets a uniform font size */
+}
+
+#boardFooter {
+
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 #board {
@@ -83,14 +97,14 @@ h1 {
     margin: 0 auto;
     padding: 0;
     background-color: rgb(0, 0, 0);
-   /** box-shadow: 0 5px 10px 0 rgba(102, 102, 102, 0.37);**/
+    /** box-shadow: 0 5px 10px 0 rgba(102, 102, 102, 0.37);**/
 }
 
-#lives {
+/* #lives {
     margin-top: 100px;
-    display: flex; 
+    display: flex;
     gap: 5px;
-}
+} */
 
 
 
@@ -112,9 +126,6 @@ h1 {
     justify-items: center;
 }
 
-#level {
-    position: absolute;
-}
 
 #textAnimation {
     position: absolute;
@@ -128,14 +139,6 @@ h1 {
     font-weight: bold;
 }
 
-#lives {
-    width: 150px;
-    height: 40px;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 #Walls {
     position: absolute;
@@ -148,8 +151,8 @@ h1 {
     height: 60px;
     border: 1px solid black;
     display: grid;
-    grid-template-columns: repeat(10, 10px);
-    grid-template-rows: repeat(6, 10px);
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(6, 1fr);
 }
 
 .pixel {
@@ -173,9 +176,9 @@ h1 {
     position: absolute;
     background: rgba(11, 116, 29, 0.25);
     box-shadow: 0 5px 32px 0 rgba(46, 235, 36, 0.37);
-    backdrop-filter: blur( 4px );
+    backdrop-filter: blur(4px);
     border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .btn {
@@ -189,4 +192,61 @@ h1 {
 
 .btn:hover {
     box-shadow: 0 8px 32px 0 rgb(108, 242, 90);
+}
+
+
+
+@media (max-width: 870px) {
+    body {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    #board {
+        height: 80vh;
+        width: 90vw;
+    }
+
+    #menu {
+        width: 90%;
+        height: 200px;
+    }
+
+    .btn {
+        font-size: 18px;
+    }
+
+
+}
+
+@media (max-width: 560px) {
+
+    .enemy {
+        height: 16px;
+        width: 26px;
+    }
+
+    #enemysDiv {
+        width: 85vw;
+        grid-template-columns: repeat(8, 1fr);
+    }
+
+    .wall {
+        width: 60px;
+        height: 40px;
+    }
+
+    .pixel {
+        width: 7px;
+        height: 7px;
+    }
+
+
+    #boardHeader{
+        font-size: 15px;
+    }
+
+    #textAnimation{
+        font-size: 50px;
+    }
 }

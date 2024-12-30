@@ -18,7 +18,7 @@ export function shut() {
   bullet.classList.add("bullets");
   bullet.classList.add("Ybullets");
   let cords_ship = ship.getBoundingClientRect();
-  bullet.style.left = `${cords_ship.left+35}px`;
+  bullet.style.left = `${cords_ship.left + 35}px`;
   bullet.style.top = `${cords_ship.top}px`;
   elements.board.appendChild(bullet);
   moveBullet(bullet, 0);
@@ -73,22 +73,21 @@ export function moveEnemys() {
   }
   if (
     elements.enemysDiv.offsetLeft >
-      cords.right - elements.enemysDiv.offsetWidth ||
+    cords.right - elements.enemysDiv.offsetWidth ||
     elements.enemysDiv.offsetLeft < cords.left
   ) {
     speed.enemySpeed *= -1;
     elements.enemysDiv.style.top = `${elements.enemysDiv.offsetTop + 1}px`;
   }
 
-  elements.enemysDiv.style.left = `${
-    elements.enemysDiv.offsetLeft + speed.enemySpeed
-  }px`;
+  elements.enemysDiv.style.left = `${elements.enemysDiv.offsetLeft + speed.enemySpeed
+    }px`;
   if (
     elements.enemysDiv.offsetTop + elements.enemysDiv.offsetHeight >
     ship.offsetTop
   ) {
     console.log("game over");
-    gameOver("GAME OVER",0);
+    gameOver("GAME OVER", 0);
     cancelAnimationFrame(requestID.requestID_MoveEnemy);
     return;
   }
@@ -119,21 +118,19 @@ window.addEventListener("keyup", (event) => {
   }
 });
 
-var x = 1;
+var x = 0;
 function moveShip() {
   if (!isMoving) {
     return;
   }
-  if (direction == "ArrowLeft" && ship.offsetLeft > elements.board.offsetLeft) {
-    ship.style.transform = ` translateX(${x - speed.shipSpeed}px)`;
+  
+  
+  if (direction == "ArrowLeft" && x >= ship.offsetWidth / 2 - elements.board.offsetWidth / 2) {
+    ship.style.transform = ` translateX(${x}px)`;
     x -= speed.shipSpeed;
   }
-  if (
-    direction == "ArrowRight" &&
-    ship.offsetLeft <
-      elements.board.offsetLeft + elements.board.offsetWidth - ship.offsetWidth
-  ) {
-    ship.style.transform = ` translateX(${x - speed.shipSpeed}px)`;
+  if (direction == "ArrowRight" && x <= elements.board.offsetWidth / 2 - ship.offsetWidth / 2) {
+    ship.style.transform = ` translateX(${x}px)`;
     x += speed.shipSpeed;
   }
 
@@ -179,9 +176,8 @@ function moving(bullet, x) {
   });
   let c = bullet.getBoundingClientRect();
   if (c.top + c.height < cords.bottom) {
-    bullet.style.transform = ` translateY(${
-      x + speed.speedEnemyBullet
-    }px) translateZ(0)`;
+    bullet.style.transform = ` translateY(${x + speed.speedEnemyBullet
+      }px) translateZ(0)`;
 
     x += speed.speedEnemyBullet;
 
@@ -191,7 +187,7 @@ function moving(bullet, x) {
       elements.lives = document.querySelectorAll(".lives");
       elements.lives[0].remove();
       if (elements.lives.length <= 1) {
-        main.gameOver("GAME OVER",0);
+        main.gameOver("GAME OVER", 0);
       }
       return;
     }

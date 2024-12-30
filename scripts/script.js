@@ -9,7 +9,9 @@ export var game = {
   isPaused: false,
   isGamrOver: false,
   score: 0,
-  esc : 0,
+  esc: 0,
+  wallNbr: 3,
+  line: 8,
 };
 export var speed = {
   bulletSpeed: 8,
@@ -19,7 +21,7 @@ export var speed = {
 };
 
 export var elements = {
-  timer : document.getElementById("timer"),
+  timer: document.getElementById("timer"),
   ScoreBar: document.getElementById("score"),
   menu: document.querySelector("#menu"),
   enemysDiv: document.getElementById("enemysDiv"),
@@ -59,7 +61,31 @@ elements.board.appendChild(ship);
 ship.style.top = `${cords.height + cords.top - ship.offsetHeight - 30}px`;
 ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
 
+/********************************************* */
 
+
+
+let body_with = window.innerWidth
+
+console.log(body_with);
+
+if (body_with > 560) {
+  elements.enemysDiv.style = `grid-template-columns: repeat(6, 1fr)`
+  game.line = 6
+} else if (body_with > 200) {
+  game.wallNbr = 2
+  elements.enemysDiv.style = `grid-template-columns: repeat(4, 1fr)`
+  game.line = 4
+} else {
+  // return
+}
+
+
+
+elements.enemysDiv.style.width = `${cords.width * 0.7}px`
+
+
+/*************************** */
 
 let s = 0
 let interval
@@ -69,15 +95,15 @@ function updatetimer() {
     timer.textContent = s
     return
   }
-    s++
-    if (s <10) {
-      timer.textContent = "0"+ s
-    }else{
-      timer.textContent = s
-    }
+  s++
+  if (s < 10) {
+    timer.textContent = "0" + s
+  } else {
+    timer.textContent = s
+  }
 }
 function starttimer() {
-    interval = setInterval(updatetimer, 1000)
+  interval = setInterval(updatetimer, 1000)
 }
 elements.PauseBtn.addEventListener('click', () => {
   clearInterval(interval)
@@ -86,7 +112,7 @@ elements.PauseBtn.addEventListener('click', () => {
 document.getElementById("restart").addEventListener('click', () => {
   clearInterval(interval)
   s = 0
-  timer.textContent = "0"+s
+  timer.textContent = "0" + s
   starttimer()
 })
 document.getElementById("startCon").addEventListener('click', () => {
@@ -101,10 +127,10 @@ elements.Walls.style.top = `${cords.top + 500}px`;
 /************ restrt pause contunie positon************** */
 
 elements.PauseBtn.onclick = Btn.Pause_Continue;
-document.addEventListener("keydown",(e)=> {
-  if (e.key == "Escape"){
+document.addEventListener("keydown", (e) => {
+  if (e.key == "Escape") {
     game.esc++
-    if (game.esc % 2 !== 0){
+    if (game.esc % 2 !== 0) {
       Btn.Pause_Continue()
       clearInterval(interval)
     } else {
@@ -116,7 +142,7 @@ document.addEventListener("keydown",(e)=> {
 document.getElementById("startCon").onclick = Btn.Pause_Continue;
 document.getElementById("restart").onclick = Btn.Restart;
 
-elements.PauseBtn.style.left = `${cords.right}px`;
+elements.PauseBtn.style.left = `${cords.right  - elements.PauseBtn.offsetWidth }px`;
 elements.PauseBtn.style.top = `${cords.bottom}px`;
 
 /*****************LEVEL************************/
@@ -124,8 +150,8 @@ elements.PauseBtn.style.top = `${cords.bottom}px`;
 export function levelUP() {
   cancelAnimationFrame(requestID.requestID_MoveEnemy);
 
-  if (game.LEVEL === 2) {
-    gameOver("YOU WIN!!",1);
+  if (game.LEVEL === 5) {
+    gameOver("YOU WIN!!", 1);
     return;
   }
   if (game.LEVEL == 0) {
@@ -141,7 +167,7 @@ export function levelUP() {
   elements.enemysDiv.style.gridTemplateRows = `repeat(${game.LEVEL}, 62.5px);`;
   elements.enemysDiv.style.height = `${40 * game.LEVEL}px`;
 
-  game.enemyLevel += 8;
+  game.enemyLevel += game.line;
   game.enemyNBR = game.enemyLevel;
   game.isPaused = false;
   for (let i = 0; i < game.enemyLevel; i++) {
@@ -159,18 +185,18 @@ export function levelUP() {
 levelUP();
 
 /****************************************/
-export function gameOver(message,win) {
+export function gameOver(message, win) {
   const cursor = document.getElementById("cursor")
   game.isGamrOver = true;
   elements.divText.style.visibility = "visible";
   elements.enemysDiv.innerHTML = "";
   elements.spanText.textContent = "";
-  if (win == 1){
-  elements.spanText.style.color = "green"
-  cursor.style.color = "green"
-  }else {
-  elements.spanText.style.color = "red"
-  cursor.style.color = "red"
+  if (win == 1) {
+    elements.spanText.style.color = "green"
+    cursor.style.color = "green"
+  } else {
+    elements.spanText.style.color = "red"
+    cursor.style.color = "red"
   }
 
   animation.animate(message);

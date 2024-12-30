@@ -1,4 +1,4 @@
-import { elements } from "./script.js";
+import { elements,game } from "./script.js";
 export function throttle(func, interval) {
   let lastCall = 0;
 
@@ -45,7 +45,7 @@ function createWall() {
 }
 export function addWalls() {
   elements.Walls.innerHTML = "";
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < game.wallNbr; i++) {
     let wall = createWall();
     elements.Walls.appendChild(wall);
   }
