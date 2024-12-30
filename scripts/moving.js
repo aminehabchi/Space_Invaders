@@ -18,7 +18,7 @@ export function shut() {
   bullet.classList.add("bullets");
   bullet.classList.add("Ybullets");
   let cords_ship = ship.getBoundingClientRect();
-  bullet.style.left = `${cords_ship.left + 35}px`;
+  bullet.style.left = `${cords_ship.left+10}px`;
   bullet.style.top = `${cords_ship.top}px`;
   elements.board.appendChild(bullet);
   moveBullet(bullet, 0);
