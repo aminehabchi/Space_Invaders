@@ -43,19 +43,17 @@ function moveBullet(bullet, x) {
     bullet.style.transform = ` translateY(${x - speed.bulletSpeed}px)`;
     x -= speed.bulletSpeed;
 
-    document.querySelectorAll(".enemy").forEach((e) => {
-      if (e.style.visibility != "hidden") {
-        if (outil.isColliding(bullet, e)) {
-          e.classList.remove("exist");
-          game.score = game.score + 5;
-          elements.ScoreBar.textContent = String(game.score).padStart(4, "0");
-          e.style.visibility = "hidden";
-          bullet.remove();
-          game.enemyNBR--;
-          if (game.enemyNBR == 0) {
-            main.levelUP();
-            return;
-          }
+    document.querySelectorAll(".exist").forEach((e) => {
+      if (outil.isColliding(bullet, e)) {
+        e.classList.remove("exist");
+        game.score = game.score + 5;
+        elements.ScoreBar.textContent = String(game.score).padStart(4, "0");
+        e.style.visibility = "hidden";
+        bullet.remove();
+        game.enemyNBR--;
+        if (game.enemyNBR == 0) {
+          main.levelUP();
+          return;
         }
       }
     });
@@ -123,8 +121,8 @@ function moveShip() {
   if (!isMoving) {
     return;
   }
-  
-  
+
+
   if (direction == "ArrowLeft" && x >= ship.offsetWidth / 2 - elements.board.offsetWidth / 2) {
     ship.style.transform = ` translateX(${x}px)`;
     x -= speed.shipSpeed;
@@ -137,9 +135,16 @@ function moveShip() {
   requestID.requestID_MoveShip = requestAnimationFrame(moveShip);
 }
 /***********************enemy shuting******************************/
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+  game.isleave = true
+  } else {
+    game.isleave = false
+  }
+})
 
 setInterval(() => {
-  if (game.isPaused || game.isGamrOver) {
+  if ( game.isleave || game.isPaused || game.isGamrOver) {
     return;
   }
   let existEnemy = document.querySelectorAll(".exist");

@@ -8,6 +8,7 @@ export var game = {
   enemyNBR: 0,
   isPaused: false,
   isGamrOver: false,
+  isleave: false,
   score: 0,
   esc: 0,
   wallNbr: 3,
@@ -33,9 +34,7 @@ export var elements = {
   livesDiv: document.getElementById("lives"),
   lives: document.querySelectorAll(".lives"),
   spanText: document.getElementById("text"),
-  live: `<span class="lives material-symbols-outlined">
-settings_heart
-</span>`,
+  live: `<img class="livesimg" src="backgd.jpg" alt="">`,
   Walls: document.getElementById("Walls"),
 };
 
@@ -122,7 +121,7 @@ starttimer()
 elements.Walls.style.width = `${cords.width}px`;
 elements.Walls.style.height = "60px";
 elements.Walls.style.left = `${cords.left}px`;
-elements.Walls.style.top = `${cords.top + 500}px`;
+elements.Walls.style.top = `${cords.top + cords.height * 0.7}px`;
 
 /************ restrt pause contunie positon************** */
 
@@ -142,7 +141,7 @@ document.addEventListener("keydown", (e) => {
 document.getElementById("startCon").onclick = Btn.Pause_Continue;
 document.getElementById("restart").onclick = Btn.Restart;
 
-elements.PauseBtn.style.left = `${cords.right  - elements.PauseBtn.offsetWidth }px`;
+elements.PauseBtn.style.left = `${cords.right - elements.PauseBtn.offsetWidth}px`;
 elements.PauseBtn.style.top = `${cords.bottom}px`;
 
 /*****************LEVEL************************/

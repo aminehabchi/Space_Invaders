@@ -100,12 +100,10 @@ h1 {
     /** box-shadow: 0 5px 10px 0 rgba(102, 102, 102, 0.37);**/
 }
 
-/* #lives {
-    margin-top: 100px;
-    display: flex;
-    gap: 5px;
-} */
-
+.livesimg {
+    height: 30px;
+    width: 40px;
+}
 
 
 .enemy {
@@ -242,11 +240,11 @@ h1 {
     }
 
 
-    #boardHeader{
+    #boardHeader {
         font-size: 15px;
     }
 
-    #textAnimation{
+    #textAnimation {
         font-size: 50px;
     }
 }
