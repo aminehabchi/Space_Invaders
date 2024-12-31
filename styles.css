@@ -218,6 +218,10 @@ h1 {
 }
 
 @media (max-width: 560px) {
+    .bullets {
+        width: 15px;
+        height: 25px;
+    }
 
     .enemy {
         height: 16px;

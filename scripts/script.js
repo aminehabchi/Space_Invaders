@@ -15,7 +15,7 @@ export var game = {
   line: 8,
 };
 export var speed = {
-  bulletSpeed: 8,
+  bulletSpeed: 5,
   enemySpeed: 1,
   shipSpeed: 3,
   speedEnemyBullet: 5,
