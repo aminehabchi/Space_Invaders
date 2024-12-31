@@ -34,7 +34,7 @@ export var elements = {
   livesDiv: document.getElementById("lives"),
   lives: document.querySelectorAll(".lives"),
   spanText: document.getElementById("text"),
-  live: `<img class="livesimg" src="backgd.jpg" alt="">`,
+  live: `<img class="livesimg" src="assets/backgd.jpg" alt="">`,
   Walls: document.getElementById("Walls"),
 };
 

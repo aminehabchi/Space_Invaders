@@ -5,7 +5,7 @@ body {
     flex-direction: column;
     align-items: center;
 
-    background-image: url('s.webp');
+    background-image: url('assets/s.webp');
     background-size: cover;
     color: blanchedalmond;
     justify-content: center;
@@ -46,7 +46,7 @@ h1 {
     position: absolute;
     height: 50px;
     width: 50px;
-    background-image: url('p88.png');
+    background-image: url('assets/p88.png');
     background-size: cover;
 }
 
@@ -59,11 +59,11 @@ h1 {
 }
 
 .Xbullets {
-    background-image: url("a.png");
+    background-image: url("assets/a.png");
 }
 
 .Ybullets {
-    background-image: url("22.png");
+    background-image: url("assets/22.png");
 }
 
 #boardHeader {
@@ -109,7 +109,7 @@ h1 {
 .enemy {
     height: 25px;
     width: 40px;
-    background-image: url('InvaderB1.png');
+    background-image: url('assets/InvaderB1.png');
     background-size: cover;
 }
 

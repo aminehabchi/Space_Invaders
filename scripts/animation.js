@@ -10,9 +10,9 @@ setInterval(function () {
   }
   existEnemy.forEach((e) => {
     if (bl) {
-      e.style.backgroundImage = "url('InvaderB1.png')";
+      e.style.backgroundImage = "url('assets/InvaderB1.png')";
     } else {
-      e.style.backgroundImage = "url('InvaderB2.png')";
+      e.style.backgroundImage = "url('assets/InvaderB2.png')";
     }
   });
   if (bl) {
