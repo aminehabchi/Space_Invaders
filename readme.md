@@ -43,7 +43,6 @@ A classic arcade-style Space Invaders game implementation using HTML, CSS, and J
 ### Scoring System
 - Each enemy destroyed: 5 points
 - Score displayed with leading zeros (e.g., "0005")
-- No point penalties
 
 ## Game Mechanics
 
