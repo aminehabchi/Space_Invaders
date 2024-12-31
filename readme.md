@@ -1,5 +1,5 @@
 # Space Invaders Game
-
+![Game Screenshot](assets/gameplay.png)
 A classic arcade-style Space Invaders game implementation using HTML, CSS, and JavaScript. Players defend against waves of descending aliens while trying to achieve the highest score possible.
 
 ## Game Features
