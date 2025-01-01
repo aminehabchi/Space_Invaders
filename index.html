@@ -23,25 +23,33 @@
         <span id="cursor">|</span>
     </div>
     <h1>Space Invaders</h1>
-    
+
     <div id="board">
+        <!-- --------------------- -->
         <div id="boardHeader">
             <div id="score">0000</div>
-            <div id="timer">00</div>
+            <div id="timer">000</div>
             <div id="lives" style="color: red;">
-                <img class="livesimg lives" src="assets/backgd.jpg" alt="">
-                <img class="livesimg lives" src="assets/backgd.jpg" alt="">
-                <img class="livesimg lives" src="assets/backgd.jpg" alt="">
+                <img class="lives" src="assets/backgd.jpg" alt="">
+                <img class="lives" src="assets/backgd.jpg" alt="">
+                <img class="lives" src="assets/backgd.jpg" alt="">
             </div>
             <div id="level">LEVEL 1</div>
         </div>
-       
-        <div id="enemysDiv"></div>
-        <div id="Walls"></div>
-            
-            <div id="pause" onclick="Pause_Continue()" class="icons material-symbols-outlined">
+        <!-- ----------------------------------- -->
+        <div id="game">
+            <div id="enemysDiv"></div>
+        </div>
+        <!-- ----------------------------------- -->
+        <div id="Walls">
+
+        </div>
+        <!-- ----------------------------------- -->
+        <div id="btn">
+            <div id="pause" class="icons material-symbols-outlined">
                 pause
             </div>
+        </div>
     </div>
 
     <div id="menu">
@@ -50,10 +58,6 @@
     </div>
     </div>
     <script type="module" src="scripts/script.js"></script>
-    <script type="module" src="scripts/outils.js"></script>
-    <script type="module" src="scripts/animation.js"></script>
-    <script type="module" src="scripts/button.js"></script>
-    <script type="module" src="scripts/moving.js"></script>
 </body>
 
 </html>

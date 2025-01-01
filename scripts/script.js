@@ -10,9 +10,10 @@ export var game = {
   isGamrOver: false,
   isleave: false,
   score: 0,
-  esc: 0,
+  livesNbr: 3,
   wallNbr: 3,
   line: 8,
+  second: 0,
 };
 export var speed = {
   bulletSpeed: 5,
@@ -31,10 +32,8 @@ export var elements = {
   divText: document.getElementById("textAnimation"),
   blurOverlay: document.querySelector("#blur-overlay"),
   PauseBtn: document.querySelector("#pause"),
-  livesDiv: document.getElementById("lives"),
   lives: document.querySelectorAll(".lives"),
   spanText: document.getElementById("text"),
-  live: `<img class="livesimg" src="assets/backgd.jpg" alt="">`,
   Walls: document.getElementById("Walls"),
 };
 
@@ -45,104 +44,36 @@ export var requestID = {
 };
 
 export var cords = elements.board.getBoundingClientRect();
-
-elements.divText.style.left = `${cords.left}px`;
-elements.divText.style.top = `${cords.top}px`;
-elements.divText.style.width = `${cords.width}px`;
-elements.divText.style.height = `${cords.height}px`;
-elements.divText.style.visibility = "hidden";
-
-
 export let ship = document.createElement("div");
-ship.id = "ship";
-elements.board.appendChild(ship);
-
-ship.style.top = `${cords.height + cords.top - ship.offsetHeight - 30}px`;
-ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
 
 /********************************************* */
 
-
-
-let body_with = window.innerWidth
-
-console.log(body_with);
-
-if (body_with > 560) {
-  elements.enemysDiv.style = `grid-template-columns: repeat(6, 1fr)`
-  game.line = 6
-} else if (body_with > 200) {
-  game.wallNbr = 2
-  elements.enemysDiv.style = `grid-template-columns: repeat(4, 1fr)`
-  game.line = 4
-} else {
-  // return
-}
-
-
-
-elements.enemysDiv.style.width = `${cords.width * 0.7}px`
-
-
 /*************************** */
 
-let s = 0
-let interval
-function updatetimer() {
-  if (game.isGamrOver) {
-    clearInterval(interval)
-    elements.timer.textContent = s
-    return
+setInterval(function updatetimer() {
+  if (game.isGamrOver || game.isPaused) {
+    return;
   }
-  s++
-  if (s < 10) {
-    elements.timer.textContent = "0" + s
-  } else {
-    elements.timer.textContent = s
-  }
-}
-function starttimer() {
-  interval = setInterval(updatetimer, 1000)
-}
-elements.PauseBtn.addEventListener('click', () => {
-  clearInterval(interval)
-})
-
-document.getElementById("restart").addEventListener('click', () => {
-  clearInterval(interval)
-  s = 0
-  elements.timer.textContent = "0" + s
-  starttimer()
-})
-document.getElementById("startCon").addEventListener('click', () => {
-  starttimer()
-})
-starttimer()
-elements.Walls.style.width = `${cords.width}px`;
-elements.Walls.style.height = "60px";
-elements.Walls.style.left = `${cords.left}px`;
-elements.Walls.style.top = `${cords.top + cords.height * 0.65}px`;
+  game.second++;
+  elements.timer.textContent = String(game.second).padStart(3, "0");
+}, 1000);
 
 /************ restrt pause contunie positon************** */
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden) {
+    Btn.Pause();
+  }
+});
 
-elements.PauseBtn.onclick = Btn.Pause_Continue;
 document.addEventListener("keydown", (e) => {
   if (e.key == "Escape") {
-    game.esc++
-    if (game.esc % 2 !== 0) {
-      Btn.Pause_Continue()
-      clearInterval(interval)
+    if (game.isPaused) {
+      Btn.Continue();
     } else {
-      Btn.Pause_Continue();
-      starttimer();
+      Btn.Pause();
     }
   }
-})
-document.getElementById("startCon").onclick = Btn.Pause_Continue;
-document.getElementById("restart").onclick = Btn.Restart;
-
-elements.PauseBtn.style.left = `${cords.right - elements.PauseBtn.offsetWidth}px`;
-elements.PauseBtn.style.top = `${cords.bottom}px`;
+});
 
 /*****************LEVEL************************/
 
@@ -172,8 +103,7 @@ export function levelUP() {
   for (let i = 0; i < game.enemyLevel; i++) {
     let enemy = document.createElement("div");
     enemy.classList.add("enemy");
-    enemy.classList.add("exist");
-    enemy.id = i.toString();
+    enemy.classList.add("existsEnemy");
     elements.enemysDiv.appendChild(enemy);
   }
   elements.levelDiv.textContent = "LEVEL " + game.LEVEL.toString();
@@ -181,21 +111,19 @@ export function levelUP() {
 }
 /**********************************************/
 
-levelUP();
-
 /****************************************/
 export function gameOver(message, win) {
-  const cursor = document.getElementById("cursor")
+  const cursor = document.getElementById("cursor");
   game.isGamrOver = true;
   elements.divText.style.visibility = "visible";
   elements.enemysDiv.innerHTML = "";
   elements.spanText.textContent = "";
   if (win == 1) {
-    elements.spanText.style.color = "green"
-    cursor.style.color = "green"
+    elements.spanText.style.color = "green";
+    cursor.style.color = "green";
   } else {
-    elements.spanText.style.color = "red"
-    cursor.style.color = "red"
+    elements.spanText.style.color = "red";
+    cursor.style.color = "red";
   }
 
   animation.animate(message);
@@ -204,3 +132,35 @@ export function gameOver(message, win) {
 }
 
 /*************************************/
+function setup() {
+  let body_with = window.innerWidth;
+
+  if (body_with < 560 && body_with > 300) {
+    elements.enemysDiv.style = `grid-template-columns: repeat(6, 1fr)`;
+    game.line = 6;
+  } else if (body_with < 300) {
+    game.wallNbr = 2;
+    elements.enemysDiv.style = `grid-template-columns: repeat(4, 1fr)`;
+    game.line = 4;
+  } 
+
+  elements.PauseBtn.onclick = Btn.Pause;
+  document.getElementById("startCon").onclick = Btn.Continue;
+  document.getElementById("restart").onclick = Btn.Restart;
+  elements.enemysDiv.style.width = `${cords.width * 0.7}px`;
+
+  elements.divText.style.left = `${cords.left}px`;
+  elements.divText.style.top = `${cords.top}px`;
+  elements.divText.style.width = `${cords.width}px`;
+  elements.divText.style.height = `${cords.height}px`;
+  elements.divText.style.visibility = "hidden";
+
+  ship.id = "ship";
+  elements.board.appendChild(ship);
+
+  ship.style.top = `${cords.height + cords.top - ship.offsetHeight - 30}px`;
+  ship.style.left = `${cords.left + cords.width / 2 - ship.offsetWidth / 2}px`;
+
+  levelUP();
+}
+setup();
