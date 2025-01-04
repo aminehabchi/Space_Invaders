@@ -184,9 +184,6 @@ h1 {
     font-weight: bold;
 }
 
-
-
-
 #menu {
     height: 300px;
     width: 300px;
@@ -201,16 +198,32 @@ h1 {
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
-
+#story {
+    height: 700px;
+    width: 700px;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: space-evenly;
+    position: absolute;
+    background: rgba(11, 116, 29, 0.25);
+    box-shadow: 0 5px 32px 0 rgba(46, 235, 36, 0.37);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
 .btn {
-    font-size: 25px;
+    font-size: 30px;
     border: none;
     background-color: transparent;
     font-family: 'Pixelify Sans';
     color: white;
     cursor: pointer;
 }
-
+#story>p {
+    padding-top: 180px;
+    font-size: 200%;
+}
 .btn:hover {
     box-shadow: 0 8px 32px 0 rgb(108, 242, 90);
 }
@@ -227,14 +240,18 @@ h1 {
         height: 80vh;
         width: 90vw;
     }
+    #story {
+        height: 80vh;
+        width: 90vw;
+    }
 
     #menu {
-        width: 90%;
-        height: 200px;
+        width: 40%;
+        height: 30%;
     }
 
     .btn {
-        font-size: 18px;
+        font-size: 25px;
     }
 
 
@@ -255,7 +272,20 @@ h1 {
         width: 85vw;
         grid-template-columns: repeat(8, 1fr);
     }
+    
+    #story>p {
+        padding-top: 70px;
+        font-size: 30px;
+    }
 
+    #menu{
+        height: 25%;
+        width: 70%;
+    }
+    .btn{
+        padding-top: 40px;
+        font-size: 20px;
+    }
     .wall {
         width: 60px;
         height: 40px;

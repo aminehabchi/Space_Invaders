@@ -65,9 +65,6 @@ function moveBullet(bullet, x) {
 /***************************move Enemys****************************/
 let xx = 0;
 export function moveEnemys() {
-  if (game.isPaused || game.isGamrOver) {
-    return;
-  }
 
   const enemyCords = elements.enemysDiv.getBoundingClientRect();
 
@@ -75,6 +72,15 @@ export function moveEnemys() {
     speed.enemySpeed *= -1;
   }
 
+  
+  if (enemyCords.right-cords.right > 0) {
+    xx+=cords.right-enemyCords.right
+  }
+  if (enemyCords.left - cords.left < 0) {
+    xx+= cords.left-enemyCords.left
+  }
+  
+  
   xx += speed.enemySpeed;
   elements.enemysDiv.style.transform = `translateX(${xx}px)`;
 
@@ -108,6 +114,20 @@ function moveShip() {
     return;
   }
 
+  const transform = ship.getBoundingClientRect();
+    
+  if (x > elements.board.offsetWidth / 2) {
+    x+=cords.right-transform.right
+    ship.style.transform = ` translateX(${x}px)`;
+
+  }
+  if (x < -elements.board.offsetWidth / 2) {
+    x+= cords.left-transform.left
+    ship.style.transform = ` translateX(${x}px)`;
+
+  }
+  
+
   if (
     direction == "ArrowLeft" &&
     x >= ship.offsetWidth / 2 - elements.board.offsetWidth / 2
@@ -124,6 +144,11 @@ function moveShip() {
     x += speed.shipSpeed;
   }
 
+  
+  
+
+  
+  
   requestID.requestID_MoveShip = requestAnimationFrame(moveShip);
 }
 /***********************enemy shuting******************************/
@@ -173,7 +198,7 @@ function moving(bullet, x) {
       game.livesNbr--;
       elements.lives[game.livesNbr].style.visibility = "hidden";
       if (game.livesNbr == 0) {
-        main.gameOver("GAME OVER", 0);
+        main.gameOver(game.gameresultTexts[1], 0);
       }
       return;
     }

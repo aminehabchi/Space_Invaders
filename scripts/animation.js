@@ -1,4 +1,5 @@
 import { game, elements, requestID } from "./script.js";
+import { Pause } from "./button.js";
 let bl = false;
 setInterval(function () {
   if (game.isGamrOver || game.isPaused) {
@@ -41,7 +42,8 @@ function animateText() {
     index++;
     if (index == text.length) {
       istyping = false;
-      requestID.timeoutId = setTimeout(animateText, 1000);
+      Pause()
+      requestID.timeoutId = setTimeout(animateText, 2000);
       return;
     }
   } else if (!istyping) {
@@ -49,9 +51,10 @@ function animateText() {
     index--;
     if (index == 0) {
       istyping = true;
-      requestID.timeoutId = setTimeout(animateText, 1000);
+     Pause()
+      requestID.timeoutId = setTimeout(animateText, 2000);
       return;
     }
   }
-  requestID.timeoutId = setTimeout(animateText, 300);
+  requestID.timeoutId = setTimeout(animateText, 50);
 }

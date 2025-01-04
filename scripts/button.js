@@ -4,7 +4,6 @@ import * as Moving from "./moving.js";
 import { game, requestID, elements } from "./script.js";
 
 export function Restart() {
-  cancelAnimationFrame(requestID.requestID_MoveEnemy);
   outil.distroy(".will");
   outil.addWalls();
   if (requestID.timeoutId) {
@@ -13,6 +12,7 @@ export function Restart() {
   elements.spanText.textContent = "";
   elements.enemysDiv.innerHTML = "";
   elements.PauseBtn.style.visibility = "visible";
+  game.isPaused = false;
   game.second = 0;
   elements.timer.textContent ="000"
   game.livesNbr = 3;
@@ -34,17 +34,23 @@ export function Restart() {
 }
 export function Pause() {
   outil.distroy(".bullets");
-
   elements.menu.style.display = "flex";
   elements.blurOverlay.style.zIndex = "1";
-  elements.menu.style.zIndex = "2";
+  if (game.isStoryshowed){
+    elements.menu.style.display = "none";
+    elements.story.style.zIndex = "2";
+  }else{
+    elements.menu.style.zIndex = "2";
+  }
+  
   elements.PauseBtn.style.visibility = "hidden";
   game.isPaused = true;
+  
 }
 export function Continue() {
   game.isPaused = false;
   elements.PauseBtn.style.visibility = "visible";
   elements.menu.style.display = "none";
   elements.blurOverlay.style.zIndex = "-1";
-  Moving.moveEnemys();
+ 
 }
