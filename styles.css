@@ -70,7 +70,8 @@ h1 {
 .pixel {
     width: 10px;
     height: 10px;
-    background: rgba(61, 212, 86, 0.74);
+    background: url("assets/wall.png");
+    background-size: cover;
     visibility: hidden;
 }
 
@@ -176,8 +177,8 @@ h1 {
     position: absolute;
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-size: 80px;
+    padding-top: 100px;
+    font-size: 25px;
 }
 
 #cursor {
@@ -201,6 +202,7 @@ h1 {
 #story {
     height: 700px;
     width: 700px;
+    display: flex;
     flex-direction: column;
     text-align: center;
     align-items: center;
@@ -221,7 +223,6 @@ h1 {
     cursor: pointer;
 }
 #story>p {
-    padding-top: 180px;
     font-size: 200%;
 }
 .btn:hover {
@@ -274,7 +275,6 @@ h1 {
     }
     
     #story>p {
-        padding-top: 70px;
         font-size: 30px;
     }
 
@@ -283,7 +283,6 @@ h1 {
         width: 70%;
     }
     .btn{
-        padding-top: 40px;
         font-size: 20px;
     }
     .wall {

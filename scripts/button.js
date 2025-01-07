@@ -4,15 +4,16 @@ import * as Moving from "./moving.js";
 import { game, requestID, elements } from "./script.js";
 
 export function Restart() {
+
   outil.distroy(".will");
   outil.addWalls();
-  if (requestID.timeoutId) {
-    clearTimeout(requestID.timeoutId);
-  }
-  elements.spanText.textContent = "";
+  
+  cancelAnimationFrame(requestID.requestID)
+  requestID.requestID = null
+  game.time = 0
+
   elements.enemysDiv.innerHTML = "";
   elements.PauseBtn.style.visibility = "visible";
-  game.isPaused = false;
   game.second = 0;
   elements.timer.textContent ="000"
   game.livesNbr = 3;
@@ -22,15 +23,16 @@ export function Restart() {
   }
 
   game.isGamrOver = false;
+  game.isPaused = false;
   game.LEVEL = 0;
   game.enemyLevel = 0;
   game.score = 0;
 
   elements.ScoreBar.textContent = "0000";
-  elements.divText.style.visibility = "hidden";
   elements.menu.style.display = "none";
   elements.blurOverlay.style.zIndex = "-1";
-  main.levelUP();
+  main.setup()
+  
 }
 export function Pause() {
   outil.distroy(".bullets");
